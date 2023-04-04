@@ -1,0 +1,337 @@
+{
+    "openapi" : "3.0.0",
+    "info" : {
+        "title" : "BingeShop Docs",
+        "version" : "1.0"
+    },
+
+    "servers" : [
+        {
+            "url": "http://localhost:3000",
+            "description": "Development server"
+        }
+    ],
+
+    "tags" : [
+        {
+            "name" : "user",
+            "description" : "All routes about user endpoints"
+        }
+    ],
+
+    "paths" : {
+        "/api/user" : {
+            "get" : {
+                "tags" : ["user"],
+                "summary" : "find all user",
+                "description" : "returns all user data details",
+                "responses" : {
+                    "200" : {
+                        "description" : "Success",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "$ref" : "#/components/schemas/UserGet"
+                                }
+                            }
+                        }
+                    },
+                    "400" : {
+                        "description" : "There is no user yet"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
+                    }
+                }
+            },
+            "patch" : {
+                "tags" : ["user"],
+                "summary" : "update user details by id",
+                "description" : "require a header token",
+                "parameters" : [
+                    {
+                        "in" : "formData",
+                        "name" : "name",
+                        "schema" : {
+                            "type" : "string"
+                        }
+                    },
+                    {
+                        "in" : "formData",
+                        "name" : "email",
+                        "schema" : {
+                            "type" : "string"
+                        }
+                    },
+                    {
+                        "in" : "formData",
+                        "name" : "street",
+                        "schema" : {
+                            "type" : "string"
+                        }
+                    },
+                    {
+                        "in" : "formData",
+                        "name" : "city",
+                        "schema" : {
+                            "type" : "string"
+                        }
+                    }
+                ],
+                "responses" : {
+                    "200" : {
+                        "description" : "Success",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "$ref" : "#/components/schemas/UserUpdate"
+                                }
+                            }
+                        }
+                    },
+                    "400" : {
+                        "description" : "There is no user with ID {id}"
+                    }
+                }
+            },
+            "delete" : {
+                "tags" : ["user"],
+                "summary" : "delete user details by id",
+                "description" : "require a header token",
+                "responses" : {
+                    "200" : {
+                        "description" : "User has been deleted"
+                    },
+                    "400" : {
+                        "description" : "There is no user with ID {id}"
+                    }
+                }
+            }
+        },
+        "/api/user/verify" : {
+            "get" : {
+                "tags" : ["user"],
+                "summary" : "verify user",
+                "description" : "verify user with the link sent to the email",
+                "responses" : {
+                    "200" : {
+                        "description" : "User verified and confirmed"
+                    },
+                    "500" : {
+                        "description" : "Invalid Token"
+                    }
+                }
+            }
+        },
+        "/api/register" : {
+            "post" : {
+                "tags" : ["user"],
+                "summary" : "create new user",
+                "description" : "",
+                "parameters" : [
+                    {
+                        "in" : "body",
+                        "name" : "body",
+                        "description" : "fields that need to be filled in",
+                        "required" : true,
+                        "schema" : {
+                            "$ref" : "#/components/schemas/UserRegisterObject"
+                        }
+                    }
+                ],
+                "responses" : {
+                    "200" : {
+                        "description" : "Success",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "$ref" : "#/components/schemas/UserRegister"
+                                }
+                            }
+                        }
+                    },
+                    "400" : {
+                        "description" : "Invalid input / Email is already registered"
+                    }
+                }
+            }
+        },
+        "/api/login" : {
+            "post" : {
+                "tags" : ["user"],
+                "summary" : "logs user into the system",
+                "description" : "",
+                "parameters" : [
+                    {
+                        "in" : "form",
+                        "name" : "email",
+                        "type" : "string",
+                        "required" : true
+                    },
+                    {
+                        "in" : "form",
+                        "name" : "password",
+                        "type" : "string",
+                        "required" : true
+                    }
+                ],
+                "responses" : {
+                    "200" : {
+                        "description" : "Success",
+                        "content" : {
+                            "application/json" : {
+                                "type" : "object",
+                                "example" : {
+                                    "data" : "token"
+                                }
+                            }
+                        }
+                    },
+                    "400" : {
+                        "description" : "Email is not registered yet / Password invalid"
+                    }
+                }
+            }
+        },
+        "/api/avatar" : {
+            "post" : {
+                "tags" : ["user"],
+                "summary" : "insert photo to specified user",
+                "description" : "require a header token",
+                "parameters" : [
+                    {
+                        "in" : "formData",
+                        "name" : "avatar",
+                        "description" : "upload image file with format .jpg or .png",
+                        "required" : true,
+                        "schema" : {
+                            "type" : "file",
+                            "format" : "binary"
+                        }
+                    }
+                ],
+                "responses" : {
+                    "200" : {
+                        "description" : "Success",
+                        "content" : {
+                            "application/json" : {
+                                "type" : "object",
+                                "example" : {
+                                    "data" : "Success update avatar"
+                                }
+                            }
+                        }
+                    },
+                    "400" : {
+                        "description" : "Invalid token / Unauthenticated / Please verify your email first"
+                    }
+                }
+            }
+        }
+    },
+
+    "components" : {
+        "schemas" : {
+            "UserGet" : {
+                "type" : "object",
+                "properties" : {
+                    "id" : { "type" : "integer" },
+                    "name" : { "type" : "string" },
+                    "email" : { "type" : "string" },
+                    "password" : { "type" : "string" },
+                    "street" : { "type" : "string" },
+                    "city" : { "type" : "string" },
+                    "avatar" : { "type" : "string", "description" : "expected value is a URL" },
+                    "role" : { "type" : "string", "description" : "value must be 'user/admin'" },
+                    "confirmed" : { "type" : "boolean" }
+                },
+                "example" : [
+                    {
+                        "id" : "1",
+                        "name" : "admin",
+                        "email" : "admin@gmail.com",
+                        "password" : "$23$10$DS4QCrAT7IDrUnrapZjtCemdB8W6VT0fP3EXR9glgNR9jegIazd/.",
+                        "street" : "Jl. Mawar",
+                        "city" : "Jakarta",
+                        "avatar" : "URL",
+                        "role" : "admin",
+                        "confirmed" : false
+                    },
+                    {
+                        "id" : "2",
+                        "name" : "customer",
+                        "email" : "customer@gmail.com",
+                        "password" : "$23$10$DS4QCrAT7IDrUnrapZjtCemdB8W6VT0fP3EXR9glgNR9jegIazd/.",
+                        "street" : "Jl. Mawar",
+                        "city" : "Bengkulu",
+                        "avatar" : "URL",
+                        "role" : "member",
+                        "confirmed" : true
+                    }
+                ]
+            },
+            "UserRegisterObject" : {
+                "type" : "object",
+                "properties" : {
+                    "name" : { "type" : "string" },
+                    "email" : { "type" : "string" },
+                    "password" : { "type" : "string" },
+                    "street" : { "type" : "string" },
+                    "city" : { "type" : "string" },
+                    "avatar" : { "type" : "string", "description" : "expected value is a URL" },
+                    "role" : { "type" : "string", "description" : "value must be 'user/admin'" }
+                }
+            },
+            "UserRegister" : {
+                "type" : "object",
+                "properties" : {
+                    "id" : { "type" : "integer" },
+                    "name" : { "type" : "string" },
+                    "email" : { "type" : "string" },
+                    "password" : { "type" : "string" },
+                    "street" : { "type" : "string" },
+                    "city" : { "type" : "string" },
+                    "avatar" : { "type" : "string", "description" : "expected value is a URL" },
+                    "role" : { "type" : "string", "description" : "value must be 'user/admin'" },
+                    "confirmed" : { "type" : "boolean" }
+                },
+                "example" : {
+                    "id" : "1",
+                    "name" : "admin",
+                    "email" : "admin@gmail.com",
+                    "password" : "$23$10$DS4QCrAT7IDrUnrapZjtCemdB8W6VT0fP3EXR9glgNR9jegIazd/.",
+                    "street" : "Jl. Mawar",
+                    "city" : "Jakarta",
+                    "avatar" : null,
+                    "role" : "admin",
+                    "confirmed" : false
+                }
+            },
+            "UserUpdate" : {
+                "type" : "object",
+                "properties" : {
+                    "id" : { "type" : "integer" },
+                    "name" : { "type" : "string" },
+                    "email" : { "type" : "string" },
+                    "password" : { "type" : "string" },
+                    "street" : { "type" : "string" },
+                    "city" : { "type" : "string" },
+                    "avatar" : { "type" : "string", "description" : "expected value is a URL" },
+                    "role" : { "type" : "string", "description" : "value must be 'user/admin'" },
+                    "confirmed" : { "type" : "boolean" }
+                },
+                "example" : {
+                    "id" : "1",
+                    "name" : "admin",
+                    "email" : "admin@gmail.com",
+                    "password" : "$23$10$DS4QCrAT7IDrUnrapZjtCemdB8W6VT0fP3EXR9glgNR9jegIazd/.",
+                    "street" : "Jl. Mawar",
+                    "city" : "Jakarta",
+                    "avatar" : "URL",
+                    "role" : "admin",
+                    "confirmed" : false
+                }
+            }
+        }
+    }
+}
