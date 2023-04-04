@@ -1,7 +1,7 @@
 {
     "openapi" : "3.0.0",
     "info" : {
-        "title" : "BingeShop Docs",
+        "title" : "E-Commerce BingleShop Docs",
         "version" : "1.0"
     },
 
@@ -16,6 +16,10 @@
         {
             "name" : "user",
             "description" : "All routes about user endpoints"
+        },
+        {
+            "name" : "product",
+            "description" : "All routes about product endpoints"
         }
     ],
 
@@ -50,31 +54,12 @@
                 "description" : "require a header token",
                 "parameters" : [
                     {
-                        "in" : "formData",
-                        "name" : "name",
+                        "in" : "body",
+                        "name" : "body",
+                        "description" : "fields that need to be filled in",
+                        "required" : true,
                         "schema" : {
-                            "type" : "string"
-                        }
-                    },
-                    {
-                        "in" : "formData",
-                        "name" : "email",
-                        "schema" : {
-                            "type" : "string"
-                        }
-                    },
-                    {
-                        "in" : "formData",
-                        "name" : "street",
-                        "schema" : {
-                            "type" : "string"
-                        }
-                    },
-                    {
-                        "in" : "formData",
-                        "name" : "city",
-                        "schema" : {
-                            "type" : "string"
+                            "$ref" : "#/components/schemas/UserUpdateFields"
                         }
                     }
                 ],
@@ -90,7 +75,10 @@
                         }
                     },
                     "400" : {
-                        "description" : "There is no user with ID {id}"
+                        "description" : "There is no user with ID {id} Unauthorized to make changes"
+                    },
+                    "401" : {
+                        "description" : "Unauthorized to make changes"
                     }
                 }
             },
@@ -104,6 +92,9 @@
                     },
                     "400" : {
                         "description" : "There is no user with ID {id}"
+                    },
+                    "401" : {
+                        "description" : "Unauthorized to make changes"
                     }
                 }
             }
@@ -135,7 +126,7 @@
                         "description" : "fields that need to be filled in",
                         "required" : true,
                         "schema" : {
-                            "$ref" : "#/components/schemas/UserRegisterObject"
+                            "$ref" : "#/components/schemas/UserRegisterFields"
                         }
                     }
                 ],
@@ -163,16 +154,13 @@
                 "description" : "",
                 "parameters" : [
                     {
-                        "in" : "form",
-                        "name" : "email",
-                        "type" : "string",
-                        "required" : true
-                    },
-                    {
-                        "in" : "form",
-                        "name" : "password",
-                        "type" : "string",
-                        "required" : true
+                        "in" : "body",
+                        "name" : "body",
+                        "description" : "fields that need to be filled in",
+                        "required" : true,
+                        "schema" : {
+                            "$ref" : "#/components/schemas/UserLoginFields"
+                        }
                     }
                 ],
                 "responses" : {
@@ -224,6 +212,119 @@
                     },
                     "400" : {
                         "description" : "Invalid token / Unauthenticated / Please verify your email first"
+                    },
+                    "401" : {
+                        "description" : "Unauthorized to make changes"
+                    }
+                }
+            }
+        },
+
+
+        "/api/product" : {
+            "get" : {
+                "tags" : ["product"],
+                "summary" : "find all product",
+                "description" : "returns all product data details",
+                "responses" : {
+                    "200" : {
+                        "description" : "Success",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "$ref" : "#/components/schemas/ProductGet"
+                                }
+                            }
+                        }
+                    },
+                    "400" : {
+                        "description" : "There is no product yet"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
+                    }
+                }
+            },
+            "post" : {
+                "tags" : ["product"],
+                "summary" : "create new product",
+                "description" : "require a header token and only can be done with admin role",
+                "parameters" : [
+                    {
+                        "in" : "body",
+                        "name" : "body",
+                        "description" : "fields that need to be filled in",
+                        "required" : true,
+                        "schema" : {
+                            "$ref" : "#/components/schemas/ProductCreateFields"
+                        }
+                    }
+                ],
+                "responses" : {
+                    "200" : {
+                        "description" : "Success",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "$ref" : "#/components/schemas/ProductCreate"
+                                }
+                            }
+                        }
+                    },
+                    "400" : {
+                        "description" : "Invalid input"
+                    }
+                }
+            }
+        },
+        "/api/product/{id}" : {
+            "patch" : {
+                "tags" : ["product"],
+                "summary" : "update product specified by id",
+                "description" : "require a header token and only can be done with admin role",
+                "parameters" : [
+                    {
+                        "in" : "body",
+                        "name" : "body",
+                        "description" : "fields that need to be filled in",
+                        "required" : true,
+                        "schema" : {
+                            "$ref" : "#/components/schemas/ProductUpdateFields"
+                        }
+                    }
+                ],
+                "responses" : {
+                    "200" : {
+                        "description" : "Success",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "$ref" : "#/components/schemas/ProductUpdate"
+                                }
+                            }
+                        }
+                    },
+                    "400" : {
+                        "description" : "There is no product with ID {id}"
+                    },
+                    "401" : {
+                        "description" : "Invalid token"
+                    }
+                }
+            },
+            "delete" : {
+                "tags" : ["product"],
+                "summary" : "delete specified product by id",
+                "description" : "require a header token and only can be done with admin role",
+                "responses" : {
+                    "200" : {
+                        "description" : "Product has been deleted"
+                    },
+                    "400" : {
+                        "description" : "There is no product with ID {id}"
+                    },
+                    "401" : {
+                        "description" : "Invalid token"
                     }
                 }
             }
@@ -255,7 +356,7 @@
                         "city" : "Jakarta",
                         "avatar" : "URL",
                         "role" : "admin",
-                        "confirmed" : false
+                        "confirmed" : true
                     },
                     {
                         "id" : "2",
@@ -264,13 +365,13 @@
                         "password" : "$23$10$DS4QCrAT7IDrUnrapZjtCemdB8W6VT0fP3EXR9glgNR9jegIazd/.",
                         "street" : "Jl. Mawar",
                         "city" : "Bengkulu",
-                        "avatar" : "URL",
+                        "avatar" : null,
                         "role" : "member",
                         "confirmed" : true
                     }
                 ]
             },
-            "UserRegisterObject" : {
+            "UserRegisterFields" : {
                 "type" : "object",
                 "properties" : {
                     "name" : { "type" : "string" },
@@ -307,6 +408,22 @@
                     "confirmed" : false
                 }
             },
+            "UserLoginFields" : {
+                "type" : "object",
+                "properties" : {
+                    "email" : { "type" : "string" },
+                    "password" : { "type" : "string" }
+                }
+            },
+            "UserUpdateFields" : {
+                "type" : "object",
+                "properties" : {
+                    "name" : { "type" : "string" },
+                    "email" : { "type" : "string" },
+                    "street" : { "type" : "string" },
+                    "city" : { "type" : "string" }
+                }
+            },
             "UserUpdate" : {
                 "type" : "object",
                 "properties" : {
@@ -330,6 +447,89 @@
                     "avatar" : "URL",
                     "role" : "admin",
                     "confirmed" : false
+                }
+            },
+            "ProductGet" : {
+                "type" : "object",
+                "properties" : {
+                    "id" : { "type" : "integer" },
+                    "userID" : { "type" : "integer" },
+                    "productName" : { "type" : "string" },
+                    "quantity" : { "type" : "integer" },
+                    "price" : { "type" : "integer" },
+                    "avatar" : { "type" : "string", "description" : "expected value is a URL" }
+                },
+                "example" : [
+                    {
+                        "id" : "1",
+                        "userID" : "1",
+                        "productName" : "Oreo 20gr",
+                        "quantity" : 20,
+                        "price" : 2000,
+                        "avatar" : "URL"
+                    },
+                    {
+                        "id" : "2",
+                        "userID" : "1",
+                        "productName" : "Pocari Sweat 300ml",
+                        "quantity" : 30,
+                        "price" : 5000,
+                        "avatar" : "URL"
+                    }
+                ]
+            },
+            "ProductCreateFields" : {
+                "type" : "object",
+                "properties" : {
+                    "userID" : { "type" : "integer" },
+                    "productName" : { "type" : "string" },
+                    "quantity" : { "type" : "integer" },
+                    "price" : { "type" : "integer" },
+                    "avatar" : { "type" : "string", "description" : "expected value is a URL" }
+                }
+            },
+            "ProductCreate" : {
+                "type" : "object",
+                "properties" : {
+                    "userID" : { "type" : "integer" },
+                    "productName" : { "type" : "string" },
+                    "quantity" : { "type" : "integer" },
+                    "price" : { "type" : "integer" },
+                    "avatar" : { "type" : "string", "description" : "expected value is a URL" }
+                },
+                "example" : {
+                    "id" : "1",
+                    "productName" : "Oreo 20gr",
+                    "quantity" : 20,
+                    "price" : 2000,
+                    "avatar" : "URL"
+                }
+            },
+            "ProductUpdateFields" : {
+                "type" : "object",
+                "properties" : {
+                    "productName" : { "type" : "string" },
+                    "quantity" : { "type" : "integer" },
+                    "price" : { "type" : "integer" }
+                }
+            },
+            "ProductUpdate" : {
+                "type" : "object",
+                "properties" : {
+                    "id" : { "type" : "integer" },
+                    "userID" : { "type" : "integer" },
+                    "productName" : { "type" : "string" },
+                    "quantity" : { "type" : "integer" },
+                    "price" : { "type" : "integer" },
+                    "avatar" : { "type" : "string", "description" : "expected value is a URL" }
+                },
+                "example" : {
+                    "id" : "1",
+                    "userID" : "1",
+                    "productName" : "Oreo 20gr",
+                    "quantity" : 20,
+                    "price" : 2000,
+                    "avatar" : "URL"
                 }
             }
         }

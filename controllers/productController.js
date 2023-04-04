@@ -46,7 +46,7 @@ class ProductController {
         {
           productName: productName,
           quantity: quantity,
-          type: price,
+          price: price,
         },
         { where: { id: id } }
       );
@@ -60,6 +60,7 @@ class ProductController {
   }
   async deleteByID(req, res, next) {
     try {
+      const { id } = req.params;
       const dataProduct = await Products.findOne({
         where: { id: id },
       });
