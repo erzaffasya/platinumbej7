@@ -20,6 +20,10 @@
         {
             "name" : "product",
             "description" : "All routes about product endpoints"
+        },
+        {
+            "name" : "order",
+            "description" : "All routes about order endpoints"
         }
     ],
 
@@ -51,18 +55,29 @@
             "patch" : {
                 "tags" : ["user"],
                 "summary" : "update user details by id",
-                "description" : "require a header token",
+                "description" : "require a **header token** and only can be done with **user role**",
                 "parameters" : [
                     {
-                        "in" : "body",
-                        "name" : "body",
-                        "description" : "fields that need to be filled in",
+                        "in" : "header",
+                        "name" : "token",
+                        "description" : "user token",
                         "required" : true,
                         "schema" : {
-                            "$ref" : "#/components/schemas/UserUpdateFields"
+                            "type" : "string"
                         }
                     }
                 ],
+                "requestBody" : {
+                    "description" : "fields that need to be filled in",
+                    "required" : true,
+                    "content" : {
+                        "application/json" : {
+                            "schema" : {
+                                "$ref" : "#/components/schemas/UserUpdateFields"
+                            }
+                        }
+                    }
+                },
                 "responses" : {
                     "200" : {
                         "description" : "Success",
@@ -84,8 +99,19 @@
             },
             "delete" : {
                 "tags" : ["user"],
-                "summary" : "delete user details by id",
-                "description" : "require a header token",
+                "summary" : "delete user by id",
+                "description" : "require a **header token** and only can be done with **user role**",
+                "parameters" : [
+                    {
+                        "in" : "header",
+                        "name" : "token",
+                        "description" : "user token",
+                        "required" : true,
+                        "schema" : {
+                            "type" : "string"
+                        }
+                    }
+                ],
                 "responses" : {
                     "200" : {
                         "description" : "User has been deleted"
@@ -119,17 +145,17 @@
                 "tags" : ["user"],
                 "summary" : "create new user",
                 "description" : "",
-                "parameters" : [
-                    {
-                        "in" : "body",
-                        "name" : "body",
-                        "description" : "fields that need to be filled in",
-                        "required" : true,
-                        "schema" : {
-                            "$ref" : "#/components/schemas/UserRegisterFields"
+                "requestBody" : {
+                    "description" : "fields that need to be filled in",
+                    "required" : true,
+                    "content" : {
+                        "application/json" : {
+                            "schema" : {
+                                "$ref" : "#/components/schemas/UserRegisterFields"
+                            }
                         }
                     }
-                ],
+                },
                 "responses" : {
                     "200" : {
                         "description" : "Success",
@@ -152,17 +178,17 @@
                 "tags" : ["user"],
                 "summary" : "logs user into the system",
                 "description" : "",
-                "parameters" : [
-                    {
-                        "in" : "body",
-                        "name" : "body",
-                        "description" : "fields that need to be filled in",
-                        "required" : true,
-                        "schema" : {
-                            "$ref" : "#/components/schemas/UserLoginFields"
+                "requestBody" : {
+                    "description" : "fields that need to be filled in",
+                    "required" : true,
+                    "content" : {
+                        "application/json" : {
+                            "schema" : {
+                                "$ref" : "#/components/schemas/UserLoginFields"
+                            }
                         }
                     }
-                ],
+                },
                 "responses" : {
                     "200" : {
                         "description" : "Success",
@@ -184,20 +210,31 @@
         "/api/avatar" : {
             "post" : {
                 "tags" : ["user"],
-                "summary" : "insert photo to specified user",
-                "description" : "require a header token",
+                "summary" : "insert a photo",
+                "description" : "require a **header token** and only can be done with **user role**",
                 "parameters" : [
                     {
-                        "in" : "formData",
-                        "name" : "avatar",
-                        "description" : "upload image file with format .jpg or .png",
+                        "in" : "header",
+                        "name" : "token",
+                        "description" : "user token",
                         "required" : true,
                         "schema" : {
-                            "type" : "file",
-                            "format" : "binary"
+                            "type" : "string"
                         }
                     }
                 ],
+                "requestBody" : {
+                    "description" : "upload image file with format .jpg or .png",
+                    "required" : true,
+                    "content" : {
+                        "image/*" : {
+                            "schema" : {
+                                "type" : "string",
+                                "format" : "binary"
+                            }
+                        }
+                    }
+                },
                 "responses" : {
                     "200" : {
                         "description" : "Success",
@@ -248,18 +285,31 @@
             "post" : {
                 "tags" : ["product"],
                 "summary" : "create new product",
-                "description" : "require a header token and only can be done with admin role",
+                "description" : "require a **header token** and only can be done with **admin role**",
+                "consumes" : ["application/json"],
+                "produces" : ["application/json"],
                 "parameters" : [
                     {
-                        "in" : "body",
-                        "name" : "body",
-                        "description" : "fields that need to be filled in",
+                        "in" : "header",
+                        "name" : "token",
+                        "description" : "admin token",
                         "required" : true,
                         "schema" : {
-                            "$ref" : "#/components/schemas/ProductCreateFields"
+                            "type" : "string"
                         }
                     }
                 ],
+                "requestBody" : {
+                    "description" : "fields that need to be filled in",
+                    "required" : true,
+                    "content" : {
+                        "application/json" : {
+                            "schema" : {
+                                "$ref" : "#/components/schemas/ProductCreateFields"
+                            }
+                        }
+                    }
+                },
                 "responses" : {
                     "200" : {
                         "description" : "Success",
@@ -280,19 +330,39 @@
         "/api/product/{id}" : {
             "patch" : {
                 "tags" : ["product"],
-                "summary" : "update product specified by id",
-                "description" : "require a header token and only can be done with admin role",
+                "summary" : "update product by id",
+                "description" : "require a **header token** and only can be done with **admin role**",
                 "parameters" : [
                     {
-                        "in" : "body",
-                        "name" : "body",
-                        "description" : "fields that need to be filled in",
+                        "in" : "header",
+                        "name" : "token",
+                        "description" : "admin token",
                         "required" : true,
                         "schema" : {
-                            "$ref" : "#/components/schemas/ProductUpdateFields"
+                            "type" : "string"
+                        }
+                    },
+                    {
+                        "in" : "path",
+                        "name" : "id",
+                        "description" : "the product id",
+                        "required" : true,
+                        "schema" : {
+                            "type" : "integer"
                         }
                     }
                 ],
+                "requestBody" : {
+                    "description" : "fields that need to be filled in",
+                    "required" : true,
+                    "content" : {
+                        "application/json" : {
+                            "schema" : {
+                                "$ref" : "#/components/schemas/ProductUpdateFields"
+                            }
+                        }
+                    }
+                },
                 "responses" : {
                     "200" : {
                         "description" : "Success",
@@ -314,8 +384,28 @@
             },
             "delete" : {
                 "tags" : ["product"],
-                "summary" : "delete specified product by id",
-                "description" : "require a header token and only can be done with admin role",
+                "summary" : "delete product by id",
+                "description" : "require a **header token** and only can be done with **admin role**",
+                "parameters" : [
+                    {
+                        "in" : "header",
+                        "name" : "token",
+                        "description" : "admin token",
+                        "required" : true,
+                        "schema" : {
+                            "type" : "string"
+                        }
+                    },
+                    {
+                        "in" : "path",
+                        "name" : "id",
+                        "description" : "the product id",
+                        "required" : true,
+                        "schema" : {
+                            "type" : "integer"
+                        }
+                    }
+                ],
                 "responses" : {
                     "200" : {
                         "description" : "Product has been deleted"
@@ -325,6 +415,200 @@
                     },
                     "401" : {
                         "description" : "Invalid token"
+                    }
+                }
+            }
+        },
+
+
+        "/api/order" : {
+            "get" : {
+                "tags" : ["order"],
+                "summary" : "find all order",
+                "description" : "returns all order data details",
+                "responses" : {
+                    "200" : {
+                        "description" : "Success",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "$ref" : "#/components/schemas/OrderGet"
+                                }
+                            }
+                        }
+                    },
+                    "400" : {
+                        "description" : "There is no order yet"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
+                    }
+                }
+            },
+            "post" : {
+                "tags" : ["order"],
+                "summary" : "create order",
+                "description" : "require a **header token** and only can be done with **user role**",
+                "parameters" : [
+                    {
+                        "in" : "header",
+                        "name" : "token",
+                        "description" : "user token",
+                        "required" : true,
+                        "schema" : {
+                            "type" : "string"
+                        }
+                    },
+                    {
+                        "in" : "body",
+                        "name" : "body",
+                        "description" : "fields that need to be filled in",
+                        "required" : true,
+                        "schema" : {
+                            "$ref" : "#/components/schemas/OrderCreateFields"
+                        }
+                    }
+                ],
+                "responses" : {
+                    "200" : {
+                        "description" : "Success",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "$ref" : "#/components/schemas/OrderCreate"
+                                }
+                            }
+                        }
+                    },
+                    "400" : {
+                        "description" : "Invalid token / Invalid input"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
+                    }
+                }
+            },
+            "patch" : {
+                "tags" : ["order"],
+                "summary" : "update order details",
+                "description" : "require a **header token** and only can be done with **user role**",
+                "parameters" : [
+                    {
+                        "in" : "header",
+                        "name" : "token",
+                        "description" : "fields that need to be filled in",
+                        "required" : true,
+                        "schema" : {
+                            "type" : "string"
+                        }
+                    },
+                    {
+                        "in" : "body",
+                        "name" : "body",
+                        "description" : "fields that need to be filled in",
+                        "required" : true,
+                        "schema" : {
+                            "$ref" : "#/components/schemas/OrderUpdateFields"
+                        }
+                    }
+                ],
+                "responses" : {
+                    "200" : {
+                        "description" : "Success",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "$ref" : "#/components/schemas/OrderUpdate"
+                                }
+                            }
+                        }
+                    },
+                    "400" : {
+                        "description" : "Invalid token / There is no order with ID {id}"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/order/{id}" : {
+            "post" : {
+                "tags" : ["order"],
+                "summary" : "update order status by id",
+                "description" : "require a **header token** and only can be done with **user role**",
+                "parameters" : [
+                    {
+                        "in" : "header",
+                        "name" : "token",
+                        "description" : "user token",
+                        "required" : true,
+                        "schema" : {
+                            "type" : "string"
+                        }
+                    },
+                    {
+                        "in" : "path",
+                        "name" : "id",
+                        "description" : "the order id",
+                        "required" : true,
+                        "schema" : {
+                            "type" : "integer"
+                        }
+                    }
+                ],
+                "responses" : {
+                    "200" : {
+                        "description" : "Success",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "$ref" : "#/components/schemas/OrderUpdateStatus"
+                                }
+                            }
+                        }
+                    },
+                    "400" : {
+                        "description" : "Invalid token / There is no order with ID {id}"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
+                    }
+                }
+            },
+            "delete" : {
+                "tags" : ["order"],
+                "summary" : "delete order by id",
+                "description" : "require a **header token** and only can be done with **user role**",
+                "parameters" : [
+                    {
+                        "in" : "header",
+                        "name" : "token",
+                        "description" : "user token",
+                        "required" : true,
+                        "schema" : {
+                            "type" : "string"
+                        }
+                    },
+                    {
+                        "in" : "path",
+                        "name" : "id",
+                        "description" : "the order id",
+                        "required" : true,
+                        "schema" : {
+                            "type" : "integer"
+                        }
+                    }
+                ],
+                "responses" : {
+                    "200" : {
+                        "description" : "Order has been deleted"
+                    },
+                    "400" : {
+                        "description" : "Invalid token / There is no order with ID {id}"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
                     }
                 }
             }
@@ -344,7 +628,9 @@
                     "city" : { "type" : "string" },
                     "avatar" : { "type" : "string", "description" : "expected value is a URL" },
                     "role" : { "type" : "string", "description" : "value must be 'user/admin'" },
-                    "confirmed" : { "type" : "boolean" }
+                    "confirmed" : { "type" : "boolean" },
+                    "createdAt" : { "type" : "date-time" },
+                    "updatedAt" : { "type" : "date-time" }
                 },
                 "example" : [
                     {
@@ -356,18 +642,22 @@
                         "city" : "Jakarta",
                         "avatar" : "URL",
                         "role" : "admin",
-                        "confirmed" : true
+                        "confirmed" : true,
+                        "createdAt" : "2023-04-05T08:36:26.350Z",
+                        "updatedAt" : "2023-04-05T08:36:26.350Z"
                     },
                     {
                         "id" : "2",
-                        "name" : "customer",
+                        "name" : "user",
                         "email" : "customer@gmail.com",
                         "password" : "$23$10$DS4QCrAT7IDrUnrapZjtCemdB8W6VT0fP3EXR9glgNR9jegIazd/.",
                         "street" : "Jl. Mawar",
                         "city" : "Bengkulu",
                         "avatar" : null,
-                        "role" : "member",
-                        "confirmed" : true
+                        "role" : "user",
+                        "confirmed" : true,
+                        "createdAt" : "2023-04-05T08:36:26.350Z",
+                        "updatedAt" : "2023-04-05T08:36:26.350Z"
                     }
                 ]
             },
@@ -394,24 +684,28 @@
                     "city" : { "type" : "string" },
                     "avatar" : { "type" : "string", "description" : "expected value is a URL" },
                     "role" : { "type" : "string", "description" : "value must be 'user/admin'" },
-                    "confirmed" : { "type" : "boolean" }
+                    "confirmed" : { "type" : "boolean" },
+                    "createdAt" : { "type" : "date-time" },
+                    "updatedAt" : { "type" : "date-time" }
                 },
                 "example" : {
                     "id" : "1",
-                    "name" : "admin",
+                    "name" : "user",
                     "email" : "admin@gmail.com",
                     "password" : "$23$10$DS4QCrAT7IDrUnrapZjtCemdB8W6VT0fP3EXR9glgNR9jegIazd/.",
                     "street" : "Jl. Mawar",
                     "city" : "Jakarta",
                     "avatar" : null,
-                    "role" : "admin",
-                    "confirmed" : false
+                    "role" : "user",
+                    "confirmed" : false,
+                    "createdAt" : "2023-04-05T08:36:26.350Z",
+                    "updatedAt" : "2023-04-05T08:36:26.350Z"
                 }
             },
             "UserLoginFields" : {
                 "type" : "object",
                 "properties" : {
-                    "email" : { "type" : "string" },
+                    "email" : { "type" : "string", "format" : "email" },
                     "password" : { "type" : "string" }
                 }
             },
@@ -435,7 +729,9 @@
                     "city" : { "type" : "string" },
                     "avatar" : { "type" : "string", "description" : "expected value is a URL" },
                     "role" : { "type" : "string", "description" : "value must be 'user/admin'" },
-                    "confirmed" : { "type" : "boolean" }
+                    "confirmed" : { "type" : "boolean" },
+                    "createdAt" : { "type" : "date-time" },
+                    "updatedAt" : { "type" : "date-time" }
                 },
                 "example" : {
                     "id" : "1",
@@ -446,7 +742,9 @@
                     "city" : "Jakarta",
                     "avatar" : "URL",
                     "role" : "admin",
-                    "confirmed" : false
+                    "confirmed" : false,
+                    "createdAt" : "2023-04-05T08:36:26.350Z",
+                    "updatedAt" : "2023-04-05T08:36:26.350Z"
                 }
             },
             "ProductGet" : {
@@ -457,7 +755,9 @@
                     "productName" : { "type" : "string" },
                     "quantity" : { "type" : "integer" },
                     "price" : { "type" : "integer" },
-                    "avatar" : { "type" : "string", "description" : "expected value is a URL" }
+                    "avatar" : { "type" : "string", "description" : "expected value is a URL" },
+                    "createdAt" : { "type" : "date-time" },
+                    "updatedAt" : { "type" : "date-time" }
                 },
                 "example" : [
                     {
@@ -466,7 +766,9 @@
                         "productName" : "Oreo 20gr",
                         "quantity" : 20,
                         "price" : 2000,
-                        "avatar" : "URL"
+                        "avatar" : "URL",
+                        "createdAt" : "2023-04-05T08:36:26.350Z",
+                        "updatedAt" : "2023-04-05T08:36:26.350Z"
                     },
                     {
                         "id" : "2",
@@ -474,7 +776,9 @@
                         "productName" : "Pocari Sweat 300ml",
                         "quantity" : 30,
                         "price" : 5000,
-                        "avatar" : "URL"
+                        "avatar" : "URL",
+                        "createdAt" : "2023-04-05T08:36:26.350Z",
+                        "updatedAt" : "2023-04-05T08:36:26.350Z"
                     }
                 ]
             },
@@ -485,7 +789,7 @@
                     "productName" : { "type" : "string" },
                     "quantity" : { "type" : "integer" },
                     "price" : { "type" : "integer" },
-                    "avatar" : { "type" : "string", "description" : "expected value is a URL" }
+                    "avatar" : { "type" : "string", "example" : "URL", "description" : "expected value is a URL" }
                 }
             },
             "ProductCreate" : {
@@ -495,14 +799,18 @@
                     "productName" : { "type" : "string" },
                     "quantity" : { "type" : "integer" },
                     "price" : { "type" : "integer" },
-                    "avatar" : { "type" : "string", "description" : "expected value is a URL" }
+                    "avatar" : { "type" : "string", "description" : "expected value is a URL" },
+                    "createdAt" : { "type" : "date-time" },
+                    "updatedAt" : { "type" : "date-time" }
                 },
                 "example" : {
-                    "id" : "1",
+                    "userID" : "1",
                     "productName" : "Oreo 20gr",
                     "quantity" : 20,
                     "price" : 2000,
-                    "avatar" : "URL"
+                    "avatar" : "URL",
+                    "createdAt" : "2023-04-05T08:36:26.350Z",
+                    "updatedAt" : "2023-04-05T08:36:26.350Z"
                 }
             },
             "ProductUpdateFields" : {
@@ -521,7 +829,9 @@
                     "productName" : { "type" : "string" },
                     "quantity" : { "type" : "integer" },
                     "price" : { "type" : "integer" },
-                    "avatar" : { "type" : "string", "description" : "expected value is a URL" }
+                    "avatar" : { "type" : "string", "description" : "expected value is a URL" },
+                    "createdAt" : { "type" : "date-time" },
+                    "updatedAt" : { "type" : "date-time" }
                 },
                 "example" : {
                     "id" : "1",
@@ -529,7 +839,137 @@
                     "productName" : "Oreo 20gr",
                     "quantity" : 20,
                     "price" : 2000,
-                    "avatar" : "URL"
+                    "avatar" : "URL",
+                    "createdAt" : "2023-04-05T08:36:26.350Z",
+                    "updatedAt" : "2023-04-05T08:36:26.350Z"
+                }
+            },
+            "OrderGet" : {
+                "type" : "object",
+                "properties" : {
+                    "id" : { "type" : "integer" },
+                    "productID" : { "type" : "integer" },
+                    "productName" : { "type" : "string" },
+                    "userID" : { "type" : "integer" },
+                    "toStreet" : { "type" : "string" },
+                    "toCity" : { "type" : "string" },
+                    "status" : { "type" : "string" },
+                    "createdAt" : { "type" : "date" },
+                    "updatedAt" : { "type" : "date" }
+                },
+                "example" : [
+                    {
+                        "id" : 1,
+                        "productID" : 1,
+                        "productName" : "Oreo 20gr",
+                        "userID" : 2,
+                        "toStreet" : "Jl. Pahlawan",
+                        "toCity" : "Jakarta",
+                        "status" : "Pending",
+                        "createdAt" : "2023-04-05T08:36:26.350Z",
+                        "updatedAt" : "2023-04-05T08:36:26.350Z"
+                    },
+                    {
+                        "id" : 2,
+                        "productID" : 2,
+                        "productName" : "Pocari Sweat 300ml",
+                        "userID" : 3,
+                        "toStreet" : "Jl. Pahlawan",
+                        "toCity" : "Jakarta",
+                        "status" : "Pending",
+                        "createdAt" : "2023-04-05T08:36:26.350Z",
+                        "updatedAt" : "2023-04-05T08:36:26.350Z"
+                    }
+                ]
+            },
+            "OrderCreateFields" : {
+                "type" : "object",
+                "properties" : {
+                    "productID" : { "type" : "integer" }
+                }
+            },
+            "OrderCreate" : {
+                "type" : "object",
+                "properties" : {
+                    "id" : { "type" : "integer" },
+                    "productID" : { "type" : "integer" },
+                    "productName" : { "type" : "string" },
+                    "userID" : { "type" : "integer" },
+                    "toStreet" : { "type" : "string" },
+                    "toCity" : { "type" : "string" },
+                    "status" : { "type" : "string" },
+                    "createdAt" : { "type" : "date" },
+                    "updatedAt" : { "type" : "date" }
+                },
+                "example" : {
+                    "id" : 1,
+                    "productID" : 1,
+                    "productName" : "Oreo 20gr",
+                    "userID" : 2,
+                    "toStreet" : "Jl. Pahlawan",
+                    "toCity" : "Jakarta",
+                    "status" : "Pending",
+                    "createdAt" : "2023-04-05T08:36:26.350Z",
+                    "updatedAt" : "2023-04-05T08:36:26.350Z"
+                }
+            },
+            "OrderUpdateFields" : {
+                "type" : "object",
+                "properties" : {
+                    "id" : { "type" : "integer" },
+                    "productID" : { "type" : "integer" },
+                    "toStreet" : { "type" : "string" },
+                    "toCity" : { "type" : "string" }
+                }
+            },
+            "OrderUpdate" : {
+                "type" : "object",
+                "properties" : {
+                    "id" : { "type" : "integer" },
+                    "productID" : { "type" : "integer" },
+                    "productName" : { "type" : "string" },
+                    "userID" : { "type" : "integer" },
+                    "toStreet" : { "type" : "string" },
+                    "toCity" : { "type" : "string" },
+                    "status" : { "type" : "string" },
+                    "createdAt" : { "type" : "date" },
+                    "updatedAt" : { "type" : "date" }
+                },
+                "example" : {
+                    "id" : 1,
+                    "productID" : 1,
+                    "productName" : "Oreo 20gr",
+                    "userID" : 2,
+                    "toStreet" : "Jl. Pahlawan",
+                    "toCity" : "Jakarta",
+                    "status" : "Pending",
+                    "createdAt" : "2023-04-05T08:36:26.350Z",
+                    "updatedAt" : "2023-04-05T08:36:26.350Z"
+                }
+            },
+            "OrderUpdateStatus" : {
+                "type" : "object",
+                "properties" : {
+                    "id" : { "type" : "integer" },
+                    "userID" : { "type" : "integer" },
+                    "productID" : { "type" : "integer" },
+                    "productName" : { "type" : "string" },
+                    "toStreet" : { "type" : "string" },
+                    "toCity" : { "type" : "string" },
+                    "status" : { "type" : "string" },
+                    "createdAt" : { "type" : "date-time" },
+                    "updatedAt" : { "type" : "date-time" }
+                },
+                "example" : {
+                    "id" : 1,
+                    "userID" : 2,
+                    "productID" : 1,
+                    "productName" : "Oreo 20gr",
+                    "toStreet" : "Jl. Pahlawan",
+                    "toCity" : "Jakarta",
+                    "status" : "Paid",
+                    "createdAt" : "2023-04-05T08:36:26.350Z",
+                    "updatedAt" : "2023-04-05T08:36:26.350Z"
                 }
             }
         }
