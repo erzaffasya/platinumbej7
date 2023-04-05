@@ -22,7 +22,7 @@ class ProductController {
         productName,
         quantity,
         price,
-        avatar: `localhost:${process.env.PORT}/${req.file.path}`
+        avatar: `localhost:${process.env.PORT}/`
       });
       return new Response(res, 200, createProduct);
     } catch (error) {
@@ -60,6 +60,7 @@ class ProductController {
   }
   async deleteByID(req, res, next) {
     try {
+      const { id } = req.params;
       const dataProduct = await Products.findOne({
         where: { id: id },
       });
