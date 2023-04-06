@@ -9,6 +9,10 @@
         {
             "url": "http://localhost:3000",
             "description": "Development server"
+        },
+        {
+            "url": "http://34.128.104.172:8080",
+            "description": "Production server"
         }
     ],
 
@@ -94,6 +98,9 @@
                     },
                     "401" : {
                         "description" : "Unauthorized to make changes"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
                     }
                 }
             },
@@ -121,6 +128,9 @@
                     },
                     "401" : {
                         "description" : "Unauthorized to make changes"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
                     }
                 }
             }
@@ -135,7 +145,7 @@
                         "description" : "User verified and confirmed"
                     },
                     "500" : {
-                        "description" : "Invalid Token"
+                        "description" : "Invalid Token / Internal server error"
                     }
                 }
             }
@@ -169,6 +179,9 @@
                     },
                     "400" : {
                         "description" : "Invalid input / Email is already registered"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
                     }
                 }
             }
@@ -203,6 +216,9 @@
                     },
                     "400" : {
                         "description" : "Email is not registered yet / Password invalid"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
                     }
                 }
             }
@@ -252,6 +268,9 @@
                     },
                     "401" : {
                         "description" : "Unauthorized to make changes"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
                     }
                 }
             }
@@ -323,6 +342,9 @@
                     },
                     "400" : {
                         "description" : "Invalid input"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
                     }
                 }
             }
@@ -379,6 +401,9 @@
                     },
                     "401" : {
                         "description" : "Invalid token"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
                     }
                 }
             },
@@ -415,6 +440,9 @@
                     },
                     "401" : {
                         "description" : "Invalid token"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
                     }
                 }
             }
