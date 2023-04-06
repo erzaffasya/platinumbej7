@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BingleShop | Chat</title>
+</head>
+<body>
+    <div id="roomContainer">
+        <% Object.keys(rooms).forEach( room => { %>
+            <div> 
+                <span> <%= room %> </span> 
+                <a href="/api/chat/<%= room %>"> Join </a>
+            </div>
+        <% }) %>
+        <form action="/api/chat/room" method="post">
+            <input type="text" name="room" required>
+            <button type="submit"> New Room </button>
+        </form>
+    </div>
+</body>
+</html>
