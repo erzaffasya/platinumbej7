@@ -18,6 +18,7 @@ app.set('view engine', 'ejs');
 app.use('/api/docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc))
 app.use('/api', routes);
 app.use('/uploads', express.static('uploads')); //serve avatar path from Users database
+app.use('/api/chat', express.static('public')); 
 
 app.use((err, req, res, next) => {
   const status = err.status || 500;
@@ -29,10 +30,28 @@ app.use((err, req, res, next) => {
 })
 
 // Chat
-const rooms = { name: {} }
+const rooms = {}
 
 app.get('/api/chat', (req, res) => {
-    res.render('index', { rooms: rooms })
+    const { Users } = require('./models')
+    Users.findAll({ where: {role: 'admin'} })
+    .then(user => {
+        if(!user) {
+            res.status(400).json({
+                status: 400,
+                message: 'There is no user with admin role yet',
+                data: null
+            })
+        }
+        user.forEach(v => {
+            rooms[v.name] = { users: {} }
+        })
+        console.log(rooms);
+        // console.log(rooms['gilang'].users);
+        res.render('index', { rooms: rooms })
+    }).catch(err => console.log(err))
+
+    // create new room (for admin) when user starts chat with admin
 })
 
 app.get('/api/chat/:room', (req, res) => {
@@ -40,7 +59,7 @@ app.get('/api/chat/:room', (req, res) => {
     if(rooms[room] == null) {
         return res.redirect('/api/chat')
     }
-    res.render('chatroom', { roomName: req.params.room })
+    res.render('user-chatroom', { roomName: req.params.room })
 })
 
 app.post('/api/chat/room', (req, res) => {
@@ -54,18 +73,34 @@ app.post('/api/chat/room', (req, res) => {
 })
 
 io.on('connection', (socket) => {
-    // console.log(socket.adapter.rooms);
-    console.log(`a user connected with id ${socket.id}`);
+    socket.on('newUser', (room, name) => {
+        // console.log(`room: ${room} user: ${name}`);
+        socket.join(room)
+        rooms[room].users[socket.id] = name 
+        socket.to(room).emit('userConnected', name)
+    })
   
-    socket.on('chat message', (msg) => {
-        // console.log(`message: ${msg}`);
-        socket.broadcast.emit('new chat', msg)
+    socket.on('sendChatMessage', (room, message) => {
+        io.to(room).emit('chatMessage', {message: message, name: rooms[room].users[socket.id]})
     })
   
     socket.on('disconnect', () => {
-        console.log('user disconnected');
+        // console.log('user disconnected');
+        getUserRooms(socket).forEach(room => {
+            console.log(`room: ${room}`);
+            socket.broadcast.emit('userDisconnected', rooms[room].users[socket.id])
+            delete rooms[room].users[socket.id]
+        })
     })
 })
+
+function getUserRooms(socket) {
+    return Object.entries(rooms).reduce((names, [name, room]) => {
+        if(room.users[socket.id] != null) 
+            names.push(name)
+        return names 
+    }, [])
+}
 
 // server
 server.listen(port, () => {
