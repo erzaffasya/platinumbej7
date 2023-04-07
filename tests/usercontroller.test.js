@@ -45,7 +45,8 @@ describe("UserController", () => {
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
         data: users,
-        status: "Success",
+        status: 200,
+        message: "Success",
       });
     });
 
@@ -143,15 +144,16 @@ describe("UserController", () => {
         confirmed: false,
       });
       expect(transporter.sendMail).toHaveBeenCalledWith({
-        from: `'The Four Emperors <${process.env.EMAIL_TRANSPORTER}>'`,
+        from: `'E-Commerce Bingle Shop Platinum <${process.env.EMAIL_TRANSPORTER}>'`,
         to: "test@example.com",
-        subject: "Invitation to Join Yonko",
+        subject: "Invitation to Join E-Commerce Bingle Shop Platinum ",
         text: `Click this link to confirm your registration: "http://localhost:${process.env.PORT}/api/user/verify/?token=token"`,
       });
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
         data: { id: 1 },
-        status: "Success",
+        status: 200,
+        message: "Success",
       });
     });
 
@@ -201,7 +203,8 @@ describe("UserController", () => {
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
         data: "User verified and confirmed",
-        status: "Success",
+        status: 200,
+        message: "Success",
       });
     });
 
