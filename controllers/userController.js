@@ -45,9 +45,9 @@ class UserController {
       const token = getToken(payload);
       const url = `http://localhost:${process.env.PORT}/api/user/verify/?token=${token}`;
       const msg = {
-        from: `'The Four Emperors <${process.env.EMAIL_TRANSPORTER}>'`,
+        from: `'E-Commerce Bingle Shop Platinum <${process.env.EMAIL_TRANSPORTER}>'`,
         to: `${email}`,
-        subject: "Invitation to Join Yonko",
+        subject: "Invitation to Join E-Commerce Bingle Shop Platinum ",
         text: `Click this link to confirm your registration: "${url}"`,
       };
       const send = await transporter.sendMail(msg);
