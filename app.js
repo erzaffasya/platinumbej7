@@ -13,6 +13,7 @@ const swaggerDoc = require('./swagger.json');
 // middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.set('view engine', 'ejs');
 app.use('/api/docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc))
 app.use('/api', routes);
 app.use('/uploads', express.static('uploads')); //serve avatar path from Users database
