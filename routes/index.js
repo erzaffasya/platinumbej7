@@ -4,7 +4,7 @@ const user = require('./userRoute');
 const order = require('./orderRoute');
 const product = require('./productRoute');
 
-router.get('/home', (req, res) => {
+router.get('/', (req, res) => {
   res.render('home');
 });
 

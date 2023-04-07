@@ -9,9 +9,9 @@ const multer = require('../middlewares/multer')
 
 //   router API
 
-router.get('/product', productController.get);
+router.get('/product', authAdmin, productController.get);
 router.post('/product', authAdmin, multer.single('avatar'), validation(productValidator), productController.create);
-router.patch('/product/:id', authAdmin, productController.update);
+router.patch('/product/:id', authAdmin, validation(productValidator), productController.update);
 router.delete('/product/:id', authAdmin, productController.deleteByID);
 
 module.exports = router;
