@@ -1,8 +1,8 @@
-class ErrorResponse {
-    constructor(status, error) {
-        this.status = status
-        this.error = error
-}
+class Error {
+  constructor(status, error) {
+    this.status = status;
+    this.error = error;
+  }
 }
 
-module.exports = ErrorResponse
+module.exports = Error;

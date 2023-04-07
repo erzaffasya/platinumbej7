@@ -2,7 +2,7 @@
   "development": {
     "username": "postgres",
     "password": "cembung99",
-    "database": "platinum_group_2",
+    "database": "project",
     "host": "localhost",
     "dialect": "postgres"
   },
