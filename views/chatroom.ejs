@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script> const roomName = "<%= roomName %>" </script>
+    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script defer src="clientside-chat.js"></script>
+    <title> BingleShop | <%= roomName %> </title>
+</head>
+<style>
+    #messageContainer {
+        width: 50vw;
+        margin-bottom: 5px;
+    }
+    #messageContainer > div:nth-child(2n+1) {
+        background-color: lightsalmon;
+    }
+</style>
+<body>
+    <a href="/api/chat"> Back </a>
+    <h2> Halo <span id="username"></span>, Selamat datang di room <%= roomName %> </h2>
+    <div id="messageContainer"></div>
+    <form id="messageForm">
+        <input type="text" id="messageInput" autocomplete="off">
+        <button type="submit" id="sendButton"> Send </button>
+    </form>
+</body>
+</html>
