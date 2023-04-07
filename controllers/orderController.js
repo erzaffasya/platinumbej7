@@ -46,7 +46,8 @@ class OrderController {
   }
   async payOrder(req, res, next) {
     try {
-      const { id } = req.user;
+      // const { id } = req.user;
+      const { id } = req.params;
       const searchOrder = await Orders.findOne({
         where: { id: id },
       });
@@ -73,8 +74,8 @@ class OrderController {
   }
   async update(req, res, next) {
     try {
-      const { productID, productName, toStreet, toCity } = req.body;
-      const { id } = req.user;
+      const { id, productID, productName, toStreet, toCity } = req.body;
+      // const { id } = req.user;
       const searchID = await Orders.findOne({
         where: { id: id },
       });
@@ -107,17 +108,18 @@ class OrderController {
   async deleteByID(req, res, next) {
     try {
       const { id } = req.user;
+      const order_id = req.params.id;
       const dataOrder = await Orders.findOne({
-        where: { id: id },
+        where: { id: order_id },
       });
       if (!dataOrder) {
-        throw new Error(400, `There is no order with ID ${id}`);
+        throw new Error(400, `There is no order with ID ${order_id}`);
       }
       if (dataOrder.userID !== id) {
         throw new Error(400, `Unauthorized to make changes`);
       }
       const deleteOrder = await Orders.destroy({
-        where: { id: id },
+        where: { id: order_id },
       });
       return new Response(res, 200, 'Order has been deleted');
     } catch (error) {

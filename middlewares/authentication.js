@@ -1,5 +1,5 @@
 const { verifyToken } = require('../helpers/jwt');
-const { Users } = require('../models');
+const { Users, Users_Chatrooms } = require('../models');
 const Error = require('../helpers/error');
 
 const authUser= async (req, res, next) => {
