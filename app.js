@@ -30,28 +30,10 @@ app.use((err, req, res, next) => {
 })
 
 // Chat
-const rooms = {}
+const rooms = { 'room-one' : { users : {}}, 'room-two' : { users : {}} }
 
 app.get('/api/chat', (req, res) => {
-    const { Users } = require('./models')
-    Users.findAll({ where: {role: 'admin'} })
-    .then(user => {
-        if(!user) {
-            res.status(400).json({
-                status: 400,
-                message: 'There is no user with admin role yet',
-                data: null
-            })
-        }
-        user.forEach(v => {
-            rooms[v.name] = { users: {} }
-        })
-        console.log(rooms);
-        // console.log(rooms['gilang'].users);
-        res.render('index', { rooms: rooms })
-    }).catch(err => console.log(err))
-
-    // create new room (for admin) when user starts chat with admin
+    res.render('index', { rooms: rooms })
 })
 
 app.get('/api/chat/:room', (req, res) => {
@@ -59,36 +41,24 @@ app.get('/api/chat/:room', (req, res) => {
     if(rooms[room] == null) {
         return res.redirect('/api/chat')
     }
-    res.render('user-chatroom', { roomName: req.params.room })
-})
-
-app.post('/api/chat/room', (req, res) => {
-    const { room } = req.body
-    if(rooms[room] != null) {
-        return res.redirect('/api/chat')
-    }
-    rooms[room] = { users: {} }
-    res.redirect(`/api/chat/${room}`)
-    // send message that new room created
+    res.render('chatroom', { roomName: req.params.room })
 })
 
 io.on('connection', (socket) => {
     socket.on('newUser', (room, name) => {
-        // console.log(`room: ${room} user: ${name}`);
         socket.join(room)
         rooms[room].users[socket.id] = name 
         socket.to(room).emit('userConnected', name)
     })
   
     socket.on('sendChatMessage', (room, message) => {
+        // insert chat messages into db
         io.to(room).emit('chatMessage', {message: message, name: rooms[room].users[socket.id]})
     })
   
     socket.on('disconnect', () => {
-        // console.log('user disconnected');
         getUserRooms(socket).forEach(room => {
-            console.log(`room: ${room}`);
-            socket.broadcast.emit('userDisconnected', rooms[room].users[socket.id])
+            socket.to(room).emit('userDisconnected', rooms[room].users[socket.id])
             delete rooms[room].users[socket.id]
         })
     })
