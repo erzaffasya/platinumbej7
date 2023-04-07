@@ -22,7 +22,7 @@ class ProductController {
         productName,
         quantity,
         price,
-        avatar: `localhost:${process.env.PORT}/`,
+        avatar: `localhost:${process.env.PORT}/${req.file.path}`
       });
       return new Response(res, 200, createProduct);
     } catch (error) {
