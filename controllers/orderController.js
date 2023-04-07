@@ -15,6 +15,19 @@ class OrderController {
       next(error);
     }
   }
+  async getOrderUser(req, res, next) {
+    try {
+      const dataOrder = await Orders.findAll({
+        where: { userID: req.user.id }
+      });
+      if (dataOrder.length < 1) {
+        throw new Error(400, 'There is no order from this user yet');
+      }
+      return new Response(res, 200, dataOrder);
+    } catch (error) {
+      next(error);
+    }
+  }
   async create(req, res, next) {
     try {
       const { productID, productName, toStreet, toCity, status } = req.body;
