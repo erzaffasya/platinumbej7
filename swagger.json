@@ -640,6 +640,182 @@
                     }
                 }
             }
+        },
+        "/api/product" : {
+            "get" : {
+                "tags" : ["product"],
+                "summary" : "find all product",
+                "description" : "returns all product data details",
+                "responses" : {
+                    "200" : {
+                        "description" : "Success",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "$ref" : "#/components/schemas/GetProduct"
+                                }
+                            }
+                        }
+                    },
+                    "400" : {
+                        "description" : "There is no product yet"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
+                    }
+                }
+            },
+            "post" : {
+                "tags" : ["product"],
+                "summary" : "create product",
+                "description" : "require a header token and admin authentication",
+                "parameters" : [
+                    {
+                        "in" : "formData",
+                        "name" : "productName",
+                        "schema" : {
+                            "type" : "string"
+                        }
+                    },
+                    {
+                        "in" : "formData",
+                        "name" : "quantity",
+                        "schema" : {
+                            "type" : "integer"
+                        }
+                    },
+                    {
+                        "in" : "formData",
+                        "name" : "price",
+                        "schema" : {
+                            "type" : "integer"
+                        }
+                    },
+                    {
+                        "in" : "formData",
+                        "name" : "avatar",
+                        "schema" : {
+                            "type" : "file"
+                        }
+                    }
+                ],
+                "responses" : {
+                    "200" : {
+                        "description" : "Success",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "$ref" : "#/components/schemas/CreateProduct"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/product/:id": {
+            "patch" : {
+                "tags" : ["product"],
+                "summary" : "update product details by id",
+                "description" : "require a header token",
+                "parameters" : [
+                    {
+                        "in" : "path",
+                        "name" : "id",
+                        "required": true,
+                        "schema" : {
+                            "type" : "string"
+                        }
+                    },
+                    {
+                        "in" : "header",
+                        "name" : "token",
+                        "schema" : {
+                            "type" : "string"
+                        }
+                    },
+                    {
+                        "in" : "formData",
+                        "name" : "productName",
+                        "schema" : {
+                            "type" : "string"
+                        }
+                    },
+                    {
+                        "in" : "formData",
+                        "name" : "quantity",
+                        "schema" : {
+                            "type" : "integer"
+                        }
+                    },
+                    {
+                        "in" : "formData",
+                        "name" : "price",
+                        "schema" : {
+                            "type" : "integer"
+                        }
+                    }
+
+                ],
+                "responses" : {
+                    "200" : {
+                        "description" : "Success",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "$ref" : "#/components/schemas/UpdateProduct"
+                                }
+                            }
+                        }
+                    },
+                    "400" : {
+                        "description" : "There is no product with ID {id}"
+                    },
+                    "401" : {
+                        "description" : "Unauthorized to make changes"
+                    }
+                }
+            },
+            "delete" : {
+                "tags" : ["product"],
+                "summary" : "delete product by id",
+                "description" : "require a user & product id",
+                "parameters" : [
+                    {
+                        "in" : "path",
+                        "name" : "id",
+                        "required": true,
+                        "schema" : {
+                            "type" : "string"
+                        }
+                    },
+                    {
+                        "in" : "header",
+                        "name" : "token",
+                        "schema" : {
+                            "type" : "string"
+                        }
+                    }
+                ],
+                "responses" : {
+                    "200" : {
+                        "description" : "Product has been deleted",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "$ref" : "#/components/schemas/DeleteProduct"
+                                }
+                            }
+                        }
+                    },
+                    "400" : {
+                        "description" : "There is no product with ID {id}"
+                    },
+                    "401" : {
+                        "description" : "Unauthorized to make changes"
+                    }
+                }
+            }
         }
     },
 
@@ -999,7 +1175,99 @@
                     "createdAt" : "2023-04-05T08:36:26.350Z",
                     "updatedAt" : "2023-04-05T08:36:26.350Z"
                 }
-            }
+            },
+            "GetProduct" : {
+                "type" : "object",
+                "properties" : {
+                    "id" : { "type" : "integer" },
+                    "userID" : { "type" : "integer" },
+                    "productName" : { "type" : "string" },
+                    "quantity" : { "type" : "integer" },
+                    "price" : { "type" : "integer" },
+                    "avatar" : { "type" : "string", "description" : "expected value is a URL" },
+                    "createdAt": {"type": "string"},
+                    "updatedAt": {"type": "string"}
+                },
+                "example" : [
+                    {
+                        "id" : "1",
+                        "user_id" : "1",
+                        "product_name" : "sepatu adidas",
+                        "quantity" : "50",
+                        "price" : "1000000",
+                        "avatar" : "URL",
+                        "createdAt": "2023-04-05T08:00:36.414Z",
+                        "updatedAt": "2023-04-05T08:00:36.414Z"
+                    },
+                    {
+                        "id" : "2",
+                        "user_id" : "1",
+                        "product_name" : "kemeja hitam",
+                        "quantity" : "39",
+                        "price" : "150000",
+                        "avatar" : "URL",
+                        "createdAt": "2023-04-05T08:00:36.414Z",
+                        "updatedAt": "2023-04-05T08:00:36.414Z"
+                    }
+                ]
+            },
+            "CreateProduct" : {
+                "type" : "object",
+                "properties" : {
+                    "id" : { "type" : "integer" },
+                    "userID" : { "type" : "integer" },
+                    "productName" : { "type" : "string" },
+                    "quantity" : { "type" : "integer" },
+                    "price" : { "type" : "integer" },
+                    "avatar" : { "type" : "string", "description" : "expected value is a URL" }
+                },
+                "example" : [
+                    {
+                        "id" : "1",
+                        "userID" : "1",
+                        "productName" : "sepatu adidas",
+                        "quantity" : "50",
+                        "price" : "1000000",
+                        "avatar" : "URL",
+                        "updatedAt": "2023-04-05T08:00:36.414Z",
+                        "createdAt": "2023-04-05T08:00:36.414Z"
+                    }
+                ]
+            },
+            "UpdateProduct" : {
+                "type" : "object",
+                "properties" : {
+                    "id" : { "type" : "integer" },
+                    "userID" : { "type" : "integer" },
+                    "productName" : { "type" : "string" },
+                    "quantity" : { "type" : "integer" },
+                    "price" : { "type" : "integer" },
+                    "avatar" : { "type" : "string", "description" : "expected value is a URL" },
+                    "updatedAt" : { "type" : "string"},
+                    "createdAt" : { "type" : "string"}
+                },
+                "example" : [
+                    {
+                        "id" : "1",
+                        "userID" : "1",
+                        "productName" : "sepatu adidas",
+                        "quantity" : "50",
+                        "price" : "1000000",
+                        "avatar" : "URL",
+                        "updatedAt": "2023-04-05T08:00:36.414Z",
+                        "createdAt": "2023-04-06T08:00:36.414Z"
+                    }
+                ]
+            },
+            "DeleteProduct" : {
+                "type" : "object",
+                "example" : [
+                    {
+                        "status": "Success",
+                        "data": "Product has been deleted"
+                    }
+                ]
+            } 
         }
     }
 }

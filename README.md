@@ -31,10 +31,6 @@ migrate table
 ```bson
 sequelize db:migrate
 ```
-fill the table with dummy data 
-```bson
-sequelize db:seed:all
-```
 
 run applicatiion
 ```bson
