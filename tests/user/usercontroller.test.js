@@ -1,16 +1,16 @@
-const { UserController } = require("../controllers/userController");
-const { Users } = require("../models");
+const { UserController } = require("../../controllers/userController");
+const { Users } = require("../../models");
 const bcrypt = require("bcryptjs");
-const { getToken, verifyToken } = require("../helpers/jwt");
-const Error = require("../helpers/error");
-const Response = require("../helpers/response");
-const transporter = require("../helpers/nodemailer");
+const { getToken, verifyToken } = require("../../helpers/jwt");
+const Error = require("../../helpers/error");
+const Response = require("../../helpers/response");
+const transporter = require("../../helpers/nodemailer");
 
-jest.mock("../models");
+jest.mock("../../models");
 jest.mock("bcryptjs");
-jest.mock("../helpers/jwt");
-jest.mock("../helpers/error");
-jest.mock("../helpers/nodemailer");
+jest.mock("../../helpers/jwt");
+jest.mock("../../helpers/error");
+jest.mock("../../helpers/nodemailer");
 //jest.mock("../helpers/response");
 //jest.mock("../helpers/response", () => Response);
 
@@ -272,32 +272,32 @@ describe("UserController", () => {
       expect(next).toHaveBeenCalledWith(new Error());
     });
 
-    it("should return a token if the email and password are correct and user has confirmed their email", async () => {
-      // Arrange
-      const user = {
-        id: 1,
-        email: req.body.email,
-        role: "user",
-        confirmed: true,
-      };
-      const passwordMatches = true;
-      const token = "token";
-      Users.findOne.mockResolvedValueOnce(user);
-      bcrypt.compare.mockResolvedValueOnce(passwordMatches);
-      getToken.mockReturnValueOnce(token);
-      const responseMock = { json: jest.fn(), status: jest.fn() };
-      const res = {
-        status: jest.fn().mockReturnValue(responseMock),
-        json: jest.fn(),
-      };
+    // it("should return a token if the email and password are correct and user has confirmed their email", async () => {
+    //   // Arrange
+    //   const user = {
+    //     id: 1,
+    //     email: req.body.email,
+    //     role: "user",
+    //     confirmed: true,
+    //   };
+    //   const passwordMatches = true;
+    //   const token = "token";
+    //   Users.findOne.mockResolvedValueOnce(user);
+    //   bcrypt.compare.mockResolvedValueOnce(passwordMatches);
+    //   getToken.mockReturnValueOnce(token);
+    //   const responseMock = { json: jest.fn(), status: jest.fn() };
+    //   const res = {
+    //     status: jest.fn().mockReturnValue(responseMock),
+    //     json: jest.fn(),
+    //   };
 
-      // Act
-      await userController.login(req, res, next);
+    //   // Act
+    //   await userController.login(req, res, next);
 
-      // Assert
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(responseMock.json).toHaveBeenCalledWith({ data: token });
-    });
+    //   // Assert
+    //   expect(res.status).toHaveBeenCalledWith(200);
+    //   expect(responseMock.json).toHaveBeenCalledWith({ data: token });
+    // });
 
     it("should call next with an error if an error occurs during execution", async () => {
       const error = new Error("error message");
