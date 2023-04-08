@@ -5,6 +5,8 @@ const { getToken, verifyToken } = require("../helpers/jwt");
 const bcrypt = require("bcryptjs");
 const transporter = require("../helpers/nodemailer");
 const nodemailer = require("nodemailer");
+const { uploadCloudinary } = require('../middlewares/multer');
+
 
 class UserController {
   async get(req, res, next) {
@@ -135,6 +137,7 @@ class UserController {
   }
   async updateAvatar(req, res, next) {
     try {
+      const imageUrl = await uploadCloudinary(req.file.path)
       const searchUser = await Users.findOne({
         where: { id: req.user.id },
       });
@@ -143,7 +146,7 @@ class UserController {
       }
       const updateAva = await Users.update(
         {
-          avatar: `localhost:${process.env.PORT}/${req.file.path}`,
+          avatar: imageUrl,
         },
         { where: { id: req.user.id } }
       );

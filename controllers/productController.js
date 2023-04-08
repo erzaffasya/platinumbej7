@@ -1,6 +1,7 @@
 const { Products } = require("../models");
 const Error = require("../helpers/error");
 const Response = require("../helpers/response");
+const { uploadCloudinary } = require('../middlewares/multer');
 
 class ProductController {
   async get(req, res, next) {
@@ -17,12 +18,13 @@ class ProductController {
   async create(req, res, next) {
     try {
       const { productName, quantity, price } = req.body;
+      const imageUrl = await uploadCloudinary(req.file.path)
       const createProduct = await Products.create({
         userID: req.user.id,
         productName,
         quantity,
         price,
-        avatar: `localhost:${process.env.PORT}/${req.file.path}`,
+        avatar: imageUrl,
       });
       return new Response(res, 200, createProduct);
     } catch (error) {

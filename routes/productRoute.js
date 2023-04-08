@@ -5,12 +5,12 @@ const productController = new ProductController();
 const validation  = require('../middlewares/validation');
 const { productValidator } = require ('../helpers/validator')
 const { authAdmin, authUser } = require('../middlewares/authentication');
-const multer = require('../middlewares/multer')
+const { upload } = require('../middlewares/multer')
 
 //   router API
 
 router.get('/product', authAdmin, productController.get);
-router.post('/product', authAdmin, multer.single('avatar'), validation(productValidator), productController.create);
+router.post('/product', authAdmin, upload.single('avatar'), validation(productValidator), productController.create);
 router.patch('/product/:id', authAdmin, validation(productValidator), productController.update);
 router.delete('/product/:id', authAdmin, productController.deleteByID);
 
