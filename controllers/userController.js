@@ -51,7 +51,10 @@ class UserController {
         text: `Click this link to confirm your registration: "${url}"`,
       };
       const send = await transporter.sendMail(msg);
-      return new Response(res, 200, createUser);
+      return new Response(res, 200, {
+        'nama' : name,
+        'email' : email
+      });
     } catch (error) {
       next(error);
     }

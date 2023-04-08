@@ -15,7 +15,7 @@ const upload = multer({
   limits: { fileSize: 1048576 },
   fileFilter: function (req, file, callback) {
     var ext = path.extname(file.originalname);
-    if(ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
+    if(ext !== '.png' && ext !== '.jpg' && ext !== '.jpeg' && ext !== '.png') {
         return callback(new Error('Only images are allowed'))
     }
     callback(null, true)
