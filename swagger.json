@@ -281,8 +281,10 @@
                     {
                         "in" : "formData",
                         "name" : "avatar",
+                        "description": "upload image file with format .jpg or .png",
                         "schema" : {
-                            "type" : "file"
+                            "type" : "file",
+                            "format": "binary"
                         }
                     }
                 ],
@@ -340,6 +342,15 @@
                         "name" : "price",
                         "schema" : {
                             "type" : "integer"
+                        }
+                    },
+                    {
+                        "in" : "formData",
+                        "name" : "avatar",
+                        "description": "upload image file with format .jpg or .png",
+                        "schema" : {
+                            "type" : "file",
+                            "format": "binary"
                         }
                     }
 
