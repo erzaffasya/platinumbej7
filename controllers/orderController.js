@@ -85,39 +85,39 @@ class OrderController {
       next(error);
     }
   }
-  async update(req, res, next) {
-    try {
-      const { id, productID, productName, toStreet, toCity } = req.body;
-      // const { id } = req.user;
-      const searchID = await Orders.findOne({
-        where: { id: id },
-      });
-      const searchProduct = await Products.findOne({
-        where: { id: productID },
-      });
-      if (!searchProduct) {
-        throw new Error(400, "Product is not available");
-      }
-      if (!searchID) {
-        throw new Error(400, `There is no order with ID ${id}`);
-      }
-      const updateOrder = await Orders.update(
-        {
-          productID: productID,
-          productName: searchProduct.productName,
-          toStreet: toStreet,
-          toCity: toCity,
-        },
-        { where: { id: id } }
-      );
-      const updatedOrder = await Orders.findOne({
-        where: { id: id },
-      });
-      return new Response(res, 200, updatedOrder);
-    } catch (error) {
-      next(error);
-    }
-  }
+  // async update(req, res, next) {
+  //   try {
+  //     const { id, productID, productName, toStreet, toCity } = req.body;
+  //     // const { id } = req.user;
+  //     const searchID = await Orders.findOne({
+  //       where: { id: id },
+  //     });
+  //     const searchProduct = await Products.findOne({
+  //       where: { id: productID },
+  //     });
+  //     if (!searchProduct) {
+  //       throw new Error(400, "Product is not available");
+  //     }
+  //     if (!searchID) {
+  //       throw new Error(400, `There is no order with ID ${id}`);
+  //     }
+  //     const updateOrder = await Orders.update(
+  //       {
+  //         productID: productID,
+  //         productName: searchProduct.productName,
+  //         toStreet: toStreet,
+  //         toCity: toCity,
+  //       },
+  //       { where: { id: id } }
+  //     );
+  //     const updatedOrder = await Orders.findOne({
+  //       where: { id: id },
+  //     });
+  //     return new Response(res, 200, updatedOrder);
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // }
   async deleteByID(req, res, next) {
     try {
       const { id } = req.user;
