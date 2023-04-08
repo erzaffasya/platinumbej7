@@ -4,6 +4,5 @@ steps:
   entrypoint: /bin/sh
   args:
   - '-c'
-  - |
-    set -x && \
+  - |-
     gcloud compute ssh instance-ems --zone=asia-southeast2-a --command='/bin/sh /home/hairian/pull.sh'
