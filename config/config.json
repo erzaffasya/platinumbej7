@@ -1,22 +1,22 @@
 {
   "development": {
     "username": "postgres",
-    "password": "postgres",
-    "database": "project",
+    "password": "2105",
+    "database": "binar_platinum",
     "host": "localhost",
     "dialect": "postgres"
   },
   "test": {
-    "username": "postgres",
-    "password": "postgres",
-    "database": "project",
+    "username": "amienbijak",
+    "password": "metanaCH4",
+    "database": "project_platinum_binar_test",
     "host": "localhost",
     "dialect": "postgres"
   },
   "production": {
-    "username": "postgres",
-    "password": "postgres",
-    "database": "project",
+    "username": "amienbijak",
+    "password": "metanaCH4",
+    "database": "project_platinum_binar_production",
     "host": "localhost",
     "dialect": "postgres"
   }

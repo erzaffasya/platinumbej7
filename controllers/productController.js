@@ -1,13 +1,13 @@
-const { Products } = require('../models');
-const Error = require('../helpers/error');
-const Response = require('../helpers/response');
+const { Products } = require("../models");
+const Error = require("../helpers/error");
+const Response = require("../helpers/response");
 
 class ProductController {
   async get(req, res, next) {
     try {
       const dataProduct = await Products.findAll({});
       if (dataProduct.length < 1) {
-        throw new Error(400, 'There is no product yet');
+        throw new Error(400, "There is no product yet");
       }
       return new Response(res, 200, dataProduct);
     } catch (error) {
@@ -22,7 +22,7 @@ class ProductController {
         productName,
         quantity,
         price,
-        avatar: `localhost:${process.env.PORT}/`
+        avatar: `localhost:${process.env.PORT}/${req.file.path}`,
       });
       return new Response(res, 200, createProduct);
     } catch (error) {
@@ -37,16 +37,16 @@ class ProductController {
         where: { id: id },
       });
       if (!searchID) {
-        throw new Error(400, `There is no product with ID ${id}`)
-      };
+        throw new Error(400, `There is no product with ID ${id}`);
+      }
       if (searchID.userID !== req.user.id) {
-        throw new Error(401, 'Unauthorized to make changes')
-      };
+        throw new Error(401, "Unauthorized to make changes");
+      }
       const updateUser = await Products.update(
         {
           productName: productName,
           quantity: quantity,
-          type: price,
+          price: price,
         },
         { where: { id: id } }
       );
@@ -68,12 +68,12 @@ class ProductController {
         throw new Error(400, `There is no product with ID ${id}`);
       }
       if (dataProduct.userID !== req.user.id) {
-        throw new Error(401, 'Unauthorized to make changes')
-      };
+        throw new Error(401, "Unauthorized to make changes");
+      }
       const deleteProduct = await Products.destroy({
         where: { id: id },
       });
-      return new Response(res, 200, 'Product has been deleted');
+      return new Response(res, 200, "Product has been deleted");
     } catch (error) {
       next(error);
     }

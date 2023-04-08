@@ -8,7 +8,7 @@ const loginValidator = Joi.object({
 const productValidator = Joi.object({
     productName: Joi.string().min(5).required(),
     quantity: Joi.number().integer().required(),
-    price: Joi.number().required(),
+    price: Joi.number().integer().required(),
     avatar: Joi.string()
 })
 
@@ -22,5 +22,11 @@ const registerValidator = Joi.object({
     confirmed: Joi.boolean()
 })
 
+const orderValidator = Joi.object({
+    productName: Joi.string().min(5).required(),
+    quantity: Joi.number().integer().required(),
+    price: Joi.number().required(),
+    avatar: Joi.string()
+})
 
-module.exports =  { loginValidator, productValidator, registerValidator };
+module.exports =  { loginValidator, productValidator, registerValidator, orderValidator };

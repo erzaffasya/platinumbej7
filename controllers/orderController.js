@@ -1,14 +1,27 @@
-const { Users, Orders, Products } = require('../models');
-const Error = require('../helpers/error');
-const Response = require('../helpers/response');
-const authentication = require('../middlewares/authentication');
+const { Users, Orders, Products } = require("../models");
+const Error = require("../helpers/error");
+const Response = require("../helpers/response");
+const authentication = require("../middlewares/authentication");
 
 class OrderController {
   async get(req, res, next) {
     try {
       const dataOrder = await Orders.findAll({});
       if (dataOrder.length < 1) {
-        throw new Error(400, 'There is no order yet');
+        throw new Error(400, "There is no order yet");
+      }
+      return new Response(res, 200, dataOrder);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async getOrderUser(req, res, next) {
+    try {
+      const dataOrder = await Orders.findAll({
+        where: { userID: req.user.id }
+      });
+      if (dataOrder.length < 1) {
+        throw new Error(400, 'There is no order from this user yet');
       }
       return new Response(res, 200, dataOrder);
     } catch (error) {
@@ -26,10 +39,10 @@ class OrderController {
       }
       const searchProduct = await Products.findOne({
         where: { id: productID },
-        attributes: ['productName', 'id'],
+        attributes: ["productName", "id"],
       });
       if (!searchProduct) {
-        throw new Error(400, 'Product is not available');
+        throw new Error(400, "Product is not available");
       }
       const createOrder = await Orders.create({
         productID: searchProduct.id,
@@ -37,7 +50,7 @@ class OrderController {
         userID: req.user.id,
         toStreet: searchUser.street,
         toCity: searchUser.city,
-        status: 'Pending',
+        status: "Pending",
       });
       return new Response(res, 200, createOrder);
     } catch (error) {
@@ -46,7 +59,8 @@ class OrderController {
   }
   async payOrder(req, res, next) {
     try {
-      const { id } = req.user;
+      // const { id } = req.user;
+      const { id } = req.params;
       const searchOrder = await Orders.findOne({
         where: { id: id },
       });
@@ -55,7 +69,7 @@ class OrderController {
       }
       const payOrder = await Orders.update(
         {
-          status: 'Paid',
+          status: "Paid",
         },
         {
           where: {
@@ -73,8 +87,8 @@ class OrderController {
   }
   async update(req, res, next) {
     try {
-      const { productID, productName, toStreet, toCity } = req.body;
-      const { id } = req.user;
+      const { id, productID, productName, toStreet, toCity } = req.body;
+      // const { id } = req.user;
       const searchID = await Orders.findOne({
         where: { id: id },
       });
@@ -82,7 +96,7 @@ class OrderController {
         where: { id: productID },
       });
       if (!searchProduct) {
-        throw new Error(400, 'Product is not available');
+        throw new Error(400, "Product is not available");
       }
       if (!searchID) {
         throw new Error(400, `There is no order with ID ${id}`);
@@ -107,19 +121,20 @@ class OrderController {
   async deleteByID(req, res, next) {
     try {
       const { id } = req.user;
+      const order_id = req.params.id;
       const dataOrder = await Orders.findOne({
-        where: { id: id },
+        where: { id: order_id },
       });
       if (!dataOrder) {
-        throw new Error(400, `There is no order with ID ${id}`);
+        throw new Error(400, `There is no order with ID ${order_id}`);
       }
       if (dataOrder.userID !== id) {
         throw new Error(400, `Unauthorized to make changes`);
       }
       const deleteOrder = await Orders.destroy({
-        where: { id: id },
+        where: { id: order_id },
       });
-      return new Response(res, 200, 'Order has been deleted');
+      return new Response(res, 200, "Order has been deleted");
     } catch (error) {
       next(error);
     }
