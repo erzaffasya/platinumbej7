@@ -1,14 +1,14 @@
-const { Users, Orders, Products } = require('../models');
-const Error = require('../helpers/error');
-const Response = require('../helpers/response');
-const authentication = require('../middlewares/authentication');
+const { Users, Orders, Products } = require("../models");
+const Error = require("../helpers/error");
+const Response = require("../helpers/response");
+const authentication = require("../middlewares/authentication");
 
 class OrderController {
   async get(req, res, next) {
     try {
       const dataOrder = await Orders.findAll({});
       if (dataOrder.length < 1) {
-        throw new Error(400, 'There is no order yet');
+        throw new Error(400, "There is no order yet");
       }
       return new Response(res, 200, dataOrder);
     } catch (error) {
@@ -39,10 +39,10 @@ class OrderController {
       }
       const searchProduct = await Products.findOne({
         where: { id: productID },
-        attributes: ['productName', 'id'],
+        attributes: ["productName", "id"],
       });
       if (!searchProduct) {
-        throw new Error(400, 'Product is not available');
+        throw new Error(400, "Product is not available");
       }
       const createOrder = await Orders.create({
         productID: searchProduct.id,
@@ -50,7 +50,7 @@ class OrderController {
         userID: req.user.id,
         toStreet: searchUser.street,
         toCity: searchUser.city,
-        status: 'Pending',
+        status: "Pending",
       });
       return new Response(res, 200, createOrder);
     } catch (error) {
@@ -69,7 +69,7 @@ class OrderController {
       }
       const payOrder = await Orders.update(
         {
-          status: 'Paid',
+          status: "Paid",
         },
         {
           where: {
@@ -96,7 +96,7 @@ class OrderController {
         where: { id: productID },
       });
       if (!searchProduct) {
-        throw new Error(400, 'Product is not available');
+        throw new Error(400, "Product is not available");
       }
       if (!searchID) {
         throw new Error(400, `There is no order with ID ${id}`);
@@ -134,7 +134,7 @@ class OrderController {
       const deleteOrder = await Orders.destroy({
         where: { id: order_id },
       });
-      return new Response(res, 200, 'Order has been deleted');
+      return new Response(res, 200, "Order has been deleted");
     } catch (error) {
       next(error);
     }
