@@ -10,7 +10,7 @@
 </head>
 <body>
     <div id="roomContainer">
-        <u> Admin List </u>
+        <u> Room List </u>
         <ol>
         <% Object.keys(rooms).forEach( room => { %>
             <li>
@@ -20,10 +20,5 @@
         <% }) %>
         </ol>
     </div>
-    <br>
-    <form action="/api/chat/room" method="post">
-        <input type="text" name="room" required>
-        <button type="submit"> New Room </button>
-    </form>
 </body>
 </html>
