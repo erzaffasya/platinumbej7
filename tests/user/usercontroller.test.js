@@ -151,7 +151,7 @@ describe("UserController", () => {
       });
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
-        data: { id: 1 },
+        data: { email: "test@example.com", nama: "Test User" },
         status: 200,
         message: "Success",
       });

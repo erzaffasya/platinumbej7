@@ -1,8 +1,10 @@
 const { Products } = require("../../models");
 const { ProductController } = require("../../controllers/productController");
+const { uploadCloudinary } = require("../../middlewares/multer");
 const Response = require("../../helpers/response");
 
 jest.mock("../../models");
+jest.mock("../../middlewares/multer");
 jest.mock("../../helpers/response");
 
 describe("ProductController.create", () => {
@@ -20,10 +22,12 @@ describe("ProductController.create", () => {
       user: {
         id: 1,
       },
+      file: { path: "testPath" },
     };
     res = {};
     next = jest.fn();
     Products.create.mockClear();
+    uploadCloudinary.mockResolvedValue("testUrl");
     Response.mockImplementation((res, status, data) => ({ status, data }));
   });
 
@@ -34,7 +38,7 @@ describe("ProductController.create", () => {
       productName: "New Product",
       quantity: 10,
       price: 100,
-      avatar: `localhost:${process.env.PORT}/`,
+      avatar: req.file.path,
     };
     Products.create.mockResolvedValue(mockProduct);
 
