@@ -6,7 +6,7 @@ const messageContainer = qS('#messageContainer')
 const messageForm = qS('#messageForm')
 const messageInput = qS('#messageInput')
 const spanUsername = qS('#username')
-const roomAdmin = qS('.roomAdmin')
+const roomAdmin = qSA('.roomAdmin')
 const chatAdmin = qSA('.chatAdmin')
 const inboxList = qS('#inboxList')
 
@@ -25,7 +25,9 @@ if(messageForm != null) {
     messageForm.addEventListener('submit', (ev) => {
         ev.preventDefault()
         const message = messageInput.value
-        socket.emit('sendChatMessage', roomName, message, accountRole)
+        const senderId = window.location.search.match(/\&id=\d+/)[0].match(/\d+/)[0]
+        const receiverId = window.location.search.match(/\&receiverId=\d+/)[0].match(/\d+/)[0]
+        socket.emit('sendChatMessage', roomName, message, accountRole, +senderId, +receiverId)
         messageInput.value = ''
     })
 }
@@ -45,17 +47,17 @@ socket.on('createInbox', (data) => {
     const inboxLi = cE('li')
     const inboxSpan = cE('span')
     const inboxAnchor = cE('a')
-    inboxSpan.innerText = `${data.name} `
+    inboxSpan.innerText = `${data.userName} `
     inboxAnchor.innerText = 'Join'
-    inboxAnchor.href = `/api/chat/${data.room}?role=admin&id=${data.id}`
+    inboxAnchor.href = `/api/chat/${data.room}?role=admin&id=${data.adminId}&receiverId=${data.userId}`
     inboxLi.append(inboxSpan)
     inboxLi.append(inboxAnchor)
     if(inboxList != null)
         inboxList.append(inboxLi)
     else if(inboxList == null) {
         roomAdmin.forEach(rA => {
-            if(rA.innerText.match('')) {
-                
+            if(rA.innerText.match(data.adminName)) {
+                rA.nextElementSibling.innerText = ''
             }
         })
     }
