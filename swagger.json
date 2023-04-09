@@ -7,11 +7,11 @@
 
     "servers" : [
         {
-            "url": "http://localhost:3000",
+            "url": "http://localhost:8889",
             "description": "Development server"
         },
         {
-            "url": "http://34.128.104.172:8080",
+            "url": "http://34.128.104.172:8889",
             "description": "Production server"
         }
     ],

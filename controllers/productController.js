@@ -7,9 +7,6 @@ class ProductController {
   async get(req, res, next) {
     try {
       const dataProduct = await Products.findAll({});
-      if (dataProduct.length < 1) {
-        throw new Error(400, "There is no product yet");
-      }
       return new Response(res, 200, dataProduct);
     } catch (error) {
       next(error);
