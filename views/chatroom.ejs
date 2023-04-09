@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script> const roomName = "<%= roomName %>" </script>
-    <script src="http://34.128.104.172:8889/socket.io/socket.io.js"></script>
-    <script defer src="clientside-chat.js"></script>
-    <title> BingleShop | <%= roomName %> </title>
+    <script> 
+        const roomName = "<%= roomName %>";
+        const userName = "<%= userName %>"
+    </script>
+    <script defer src="http://34.128.104.172:8889/socket.io/socket.io.js"></script>
+    <script defer src="clientside.js"></script>
+    <title> BingleShop | Room <%= roomName %> </title>
 </head>
 <style>
     #messageContainer {
@@ -19,7 +22,7 @@
     }
 </style>
 <body>
-    <a href="/api/chat"> Back </a>
+    <a href="#" id="returnButton"> Back </a>
     <h2> Halo <span id="username"></span>, Selamat datang di room <%= roomName %> </h2>
     <div id="messageContainer"></div>
     <form id="messageForm">

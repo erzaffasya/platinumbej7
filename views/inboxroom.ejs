@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script defer src="http://34.128.104.172:8889/socket.io/socket.io.js"></script>
+    <script defer src="clientside.js"></script>
+    <title>BingleShop | Chatroom</title>
+</head>
+<body>
+    <div id="roomContainer">
+        <% if(role == 'user') { %>
+            <u> Admin List </u>
+            <ol>
+            <% Object.entries(rooms).forEach( room => { %>
+                <li>
+                    <span class="roomAdmin"> <%= room[1].name %> </span> 
+                    <% if(Object.keys(room[1].users).length == 0) { %>
+                        <a href="/api/chat/<%= room[0] %>?role=user&id=<%= userId %>&receiverId=<%= room[0] %>" class="chatAdmin"> Join </a>
+                    <% } else if(Object.keys(room[1].users).length > 0) { %>
+                        <% if(Object.values(room[1].users)[0].split('-')[0] == 'admin') { %>
+                            <% if(Object.keys(room[1].users).length == 2) { %>
+                                <u class="chatAdmin"> </u>
+                            <% } else { %>
+                                <a href="/api/chat/<%= room[0] %>?role=user&id=<%= userId %>&receiverId=<%= room[0] %>" class="chatAdmin"> Join </a>
+                            <% } %>
+                        <% } else { %>
+                            <u class="chatAdmin"> </u>
+                        <% } %>
+                    <% } %>
+                </li>
+            <% }) %>
+            </ol>
+        <% } else if(role == 'admin') { %>
+            <u> Inbox List </u>
+            <ol id="inboxList">
+                <!-- <li>
+                    <span>  </span> 
+                    <a href="#"> Join </a>
+                </li> -->
+            </ol>
+        <% } %>
+    </div>
+</body>
+</html>
