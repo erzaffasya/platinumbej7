@@ -1,6 +1,5 @@
-# Platinum-BEJ7-Group2
+# Remidial BEJ7
  
-## 🛒 E-Commerce Bingle Shop Platinum
 
 ## 🛠️ Installation Steps
 

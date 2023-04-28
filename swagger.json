@@ -12,7 +12,7 @@
         },
         {
             "url": "http://34.128.104.172:8889",
-            "description": "Production server"
+            "description": "Tweetion server"
         }
     ],
 
@@ -22,8 +22,8 @@
             "description" : "All routes about user endpoints"
         },
         {
-            "name" : "product",
-            "description" : "All routes about product endpoints"
+            "name" : "tweet",
+            "description" : "All routes about tweet endpoints"
         },
         {
             "name" : "order",
@@ -277,24 +277,24 @@
         },
 
 
-        "/api/product" : {
+        "/api/tweet" : {
             "get" : {
-                "tags" : ["product"],
-                "summary" : "find all product",
-                "description" : "returns all product data details",
+                "tags" : ["tweet"],
+                "summary" : "find all tweet",
+                "description" : "returns all tweet data details",
                 "responses" : {
                     "200" : {
                         "description" : "Success",
                         "content" : {
                             "application/json" : {
                                 "schema" : {
-                                    "$ref" : "#/components/schemas/ProductGet"
+                                    "$ref" : "#/components/schemas/TweetGet"
                                 }
                             }
                         }
                     },
                     "400" : {
-                        "description" : "There is no product yet"
+                        "description" : "There is no tweet yet"
                     },
                     "500" : {
                         "description" : "Internal server error"
@@ -302,8 +302,8 @@
                 }
             },
             "post" : {
-                "tags" : ["product"],
-                "summary" : "create new product",
+                "tags" : ["tweet"],
+                "summary" : "create new tweet",
                 "description" : "require a **header token** and only can be done with **admin role**",
                 "consumes" : ["application/json"],
                 "produces" : ["application/json"],
@@ -324,7 +324,7 @@
                     "content" : {
                         "application/json" : {
                             "schema" : {
-                                "$ref" : "#/components/schemas/ProductCreateFields"
+                                "$ref" : "#/components/schemas/TweetCreateFields"
                             }
                         }
                     }
@@ -335,7 +335,7 @@
                         "content" : {
                             "application/json" : {
                                 "schema" : {
-                                    "$ref" : "#/components/schemas/ProductCreate"
+                                    "$ref" : "#/components/schemas/TweetCreate"
                                 }
                             }
                         }
@@ -349,10 +349,10 @@
                 }
             }
         },
-        "/api/product/{id}" : {
+        "/api/tweet/{id}" : {
             "patch" : {
-                "tags" : ["product"],
-                "summary" : "update product by id",
+                "tags" : ["tweet"],
+                "summary" : "update tweet by id",
                 "description" : "require a **header token** and only can be done with **admin role**",
                 "parameters" : [
                     {
@@ -367,7 +367,7 @@
                     {
                         "in" : "path",
                         "name" : "id",
-                        "description" : "the product id",
+                        "description" : "the tweet id",
                         "required" : true,
                         "schema" : {
                             "type" : "integer"
@@ -380,7 +380,7 @@
                     "content" : {
                         "application/json" : {
                             "schema" : {
-                                "$ref" : "#/components/schemas/ProductUpdateFields"
+                                "$ref" : "#/components/schemas/TweetUpdateFields"
                             }
                         }
                     }
@@ -391,13 +391,13 @@
                         "content" : {
                             "application/json" : {
                                 "schema" : {
-                                    "$ref" : "#/components/schemas/ProductUpdate"
+                                    "$ref" : "#/components/schemas/TweetUpdate"
                                 }
                             }
                         }
                     },
                     "400" : {
-                        "description" : "There is no product with ID {id}"
+                        "description" : "There is no tweet with ID {id}"
                     },
                     "401" : {
                         "description" : "Invalid token"
@@ -408,8 +408,8 @@
                 }
             },
             "delete" : {
-                "tags" : ["product"],
-                "summary" : "delete product by id",
+                "tags" : ["tweet"],
+                "summary" : "delete tweet by id",
                 "description" : "require a **header token** and only can be done with **admin role**",
                 "parameters" : [
                     {
@@ -424,7 +424,7 @@
                     {
                         "in" : "path",
                         "name" : "id",
-                        "description" : "the product id",
+                        "description" : "the tweet id",
                         "required" : true,
                         "schema" : {
                             "type" : "integer"
@@ -433,10 +433,10 @@
                 ],
                 "responses" : {
                     "200" : {
-                        "description" : "Product has been deleted"
+                        "description" : "Tweet has been deleted"
                     },
                     "400" : {
-                        "description" : "There is no product with ID {id}"
+                        "description" : "There is no tweet with ID {id}"
                     },
                     "401" : {
                         "description" : "Invalid token"
@@ -447,26 +447,24 @@
                 }
             }
         },
-
-
-        "/api/order" : {
+        "/api/tweet" : {
             "get" : {
-                "tags" : ["order"],
-                "summary" : "find all order",
-                "description" : "returns all order data details",
+                "tags" : ["tweet"],
+                "summary" : "find all tweet",
+                "description" : "returns all tweet data details",
                 "responses" : {
                     "200" : {
                         "description" : "Success",
                         "content" : {
                             "application/json" : {
                                 "schema" : {
-                                    "$ref" : "#/components/schemas/OrderGet"
+                                    "$ref" : "#/components/schemas/GetTweet"
                                 }
                             }
                         }
                     },
                     "400" : {
-                        "description" : "There is no order yet"
+                        "description" : "There is no tweet yet"
                     },
                     "500" : {
                         "description" : "Internal server error"
@@ -474,205 +472,13 @@
                 }
             },
             "post" : {
-                "tags" : ["order"],
-                "summary" : "create order",
-                "description" : "require a **header token** and only can be done with **user role**",
-                "parameters" : [
-                    {
-                        "in" : "header",
-                        "name" : "token",
-                        "description" : "user token",
-                        "required" : true,
-                        "schema" : {
-                            "type" : "string"
-                        }
-                    },
-                    {
-                        "in" : "body",
-                        "name" : "body",
-                        "description" : "fields that need to be filled in",
-                        "required" : true,
-                        "schema" : {
-                            "$ref" : "#/components/schemas/OrderCreateFields"
-                        }
-                    }
-                ],
-                "responses" : {
-                    "200" : {
-                        "description" : "Success",
-                        "content" : {
-                            "application/json" : {
-                                "schema" : {
-                                    "$ref" : "#/components/schemas/OrderCreate"
-                                }
-                            }
-                        }
-                    },
-                    "400" : {
-                        "description" : "Invalid token / Invalid input"
-                    },
-                    "500" : {
-                        "description" : "Internal server error"
-                    }
-                }
-            },
-            "patch" : {
-                "tags" : ["order"],
-                "summary" : "update order details",
-                "description" : "require a **header token** and only can be done with **user role**",
-                "parameters" : [
-                    {
-                        "in" : "header",
-                        "name" : "token",
-                        "description" : "fields that need to be filled in",
-                        "required" : true,
-                        "schema" : {
-                            "type" : "string"
-                        }
-                    },
-                    {
-                        "in" : "body",
-                        "name" : "body",
-                        "description" : "fields that need to be filled in",
-                        "required" : true,
-                        "schema" : {
-                            "$ref" : "#/components/schemas/OrderUpdateFields"
-                        }
-                    }
-                ],
-                "responses" : {
-                    "200" : {
-                        "description" : "Success",
-                        "content" : {
-                            "application/json" : {
-                                "schema" : {
-                                    "$ref" : "#/components/schemas/OrderUpdate"
-                                }
-                            }
-                        }
-                    },
-                    "400" : {
-                        "description" : "Invalid token / There is no order with ID {id}"
-                    },
-                    "500" : {
-                        "description" : "Internal server error"
-                    }
-                }
-            }
-        },
-        "/api/order/{id}" : {
-            "post" : {
-                "tags" : ["order"],
-                "summary" : "update order status by id",
-                "description" : "require a **header token** and only can be done with **user role**",
-                "parameters" : [
-                    {
-                        "in" : "header",
-                        "name" : "token",
-                        "description" : "user token",
-                        "required" : true,
-                        "schema" : {
-                            "type" : "string"
-                        }
-                    },
-                    {
-                        "in" : "path",
-                        "name" : "id",
-                        "description" : "the order id",
-                        "required" : true,
-                        "schema" : {
-                            "type" : "integer"
-                        }
-                    }
-                ],
-                "responses" : {
-                    "200" : {
-                        "description" : "Success",
-                        "content" : {
-                            "application/json" : {
-                                "schema" : {
-                                    "$ref" : "#/components/schemas/OrderUpdateStatus"
-                                }
-                            }
-                        }
-                    },
-                    "400" : {
-                        "description" : "Invalid token / There is no order with ID {id}"
-                    },
-                    "500" : {
-                        "description" : "Internal server error"
-                    }
-                }
-            },
-            "delete" : {
-                "tags" : ["order"],
-                "summary" : "delete order by id",
-                "description" : "require a **header token** and only can be done with **user role**",
-                "parameters" : [
-                    {
-                        "in" : "header",
-                        "name" : "token",
-                        "description" : "user token",
-                        "required" : true,
-                        "schema" : {
-                            "type" : "string"
-                        }
-                    },
-                    {
-                        "in" : "path",
-                        "name" : "id",
-                        "description" : "the order id",
-                        "required" : true,
-                        "schema" : {
-                            "type" : "integer"
-                        }
-                    }
-                ],
-                "responses" : {
-                    "200" : {
-                        "description" : "Order has been deleted"
-                    },
-                    "400" : {
-                        "description" : "Invalid token / There is no order with ID {id}"
-                    },
-                    "500" : {
-                        "description" : "Internal server error"
-                    }
-                }
-            }
-        },
-        "/api/product" : {
-            "get" : {
-                "tags" : ["product"],
-                "summary" : "find all product",
-                "description" : "returns all product data details",
-                "responses" : {
-                    "200" : {
-                        "description" : "Success",
-                        "content" : {
-                            "application/json" : {
-                                "schema" : {
-                                    "$ref" : "#/components/schemas/GetProduct"
-                                }
-                            }
-                        }
-                    },
-                    "400" : {
-                        "description" : "There is no product yet"
-                    },
-                    "500" : {
-                        "description" : "Internal server error"
-                    }
-                }
-            },
-            "post" : {
-                "tags" : ["product"],
-                "summary" : "create product",
+                "tags" : ["tweet"],
+                "summary" : "create tweet",
                 "description" : "require a header token and admin authentication",
                 "parameters" : [
                     {
                         "in" : "formData",
-                        "name" : "productName",
+                        "name" : "tweet",
                         "schema" : {
                             "type" : "string"
                         }
@@ -707,7 +513,7 @@
                         "content" : {
                             "application/json" : {
                                 "schema" : {
-                                    "$ref" : "#/components/schemas/CreateProduct"
+                                    "$ref" : "#/components/schemas/CreateTweet"
                                 }
                             }
                         }
@@ -715,10 +521,10 @@
                 }
             }
         },
-        "/api/product/:id": {
+        "/api/tweet/:id": {
             "patch" : {
-                "tags" : ["product"],
-                "summary" : "update product details by id",
+                "tags" : ["tweet"],
+                "summary" : "update tweet details by id",
                 "description" : "require a header token",
                 "parameters" : [
                     {
@@ -738,7 +544,7 @@
                     },
                     {
                         "in" : "formData",
-                        "name" : "productName",
+                        "name" : "tweet",
                         "schema" : {
                             "type" : "string"
                         }
@@ -774,13 +580,13 @@
                         "content" : {
                             "application/json" : {
                                 "schema" : {
-                                    "$ref" : "#/components/schemas/UpdateProduct"
+                                    "$ref" : "#/components/schemas/UpdateTweet"
                                 }
                             }
                         }
                     },
                     "400" : {
-                        "description" : "There is no product with ID {id}"
+                        "description" : "There is no tweet with ID {id}"
                     },
                     "401" : {
                         "description" : "Unauthorized to make changes"
@@ -788,9 +594,9 @@
                 }
             },
             "delete" : {
-                "tags" : ["product"],
-                "summary" : "delete product by id",
-                "description" : "require a user & product id",
+                "tags" : ["tweet"],
+                "summary" : "delete tweet by id",
+                "description" : "require a user & tweet id",
                 "parameters" : [
                     {
                         "in" : "path",
@@ -810,17 +616,17 @@
                 ],
                 "responses" : {
                     "200" : {
-                        "description" : "Product has been deleted",
+                        "description" : "Tweet has been deleted",
                         "content" : {
                             "application/json" : {
                                 "schema" : {
-                                    "$ref" : "#/components/schemas/DeleteProduct"
+                                    "$ref" : "#/components/schemas/DeleteTweet"
                                 }
                             }
                         }
                     },
                     "400" : {
-                        "description" : "There is no product with ID {id}"
+                        "description" : "There is no tweet with ID {id}"
                     },
                     "401" : {
                         "description" : "Unauthorized to make changes"
@@ -962,12 +768,12 @@
                     "updatedAt" : "2023-04-05T08:36:26.350Z"
                 }
             },
-            "ProductGet" : {
+            "TweetGet" : {
                 "type" : "object",
                 "properties" : {
                     "id" : { "type" : "integer" },
                     "userID" : { "type" : "integer" },
-                    "productName" : { "type" : "string" },
+                    "tweet" : { "type" : "string" },
                     "quantity" : { "type" : "integer" },
                     "price" : { "type" : "integer" },
                     "avatar" : { "type" : "string", "description" : "expected value is a URL" },
@@ -978,7 +784,7 @@
                     {
                         "id" : "1",
                         "userID" : "1",
-                        "productName" : "Oreo 20gr",
+                        "tweet" : "Oreo 20gr",
                         "quantity" : 20,
                         "price" : 2000,
                         "avatar" : "URL",
@@ -988,7 +794,7 @@
                     {
                         "id" : "2",
                         "userID" : "1",
-                        "productName" : "Pocari Sweat 300ml",
+                        "tweet" : "Pocari Sweat 300ml",
                         "quantity" : 30,
                         "price" : 5000,
                         "avatar" : "URL",
@@ -997,21 +803,21 @@
                     }
                 ]
             },
-            "ProductCreateFields" : {
+            "TweetCreateFields" : {
                 "type" : "object",
                 "properties" : {
                     "userID" : { "type" : "integer" },
-                    "productName" : { "type" : "string" },
+                    "tweet" : { "type" : "string" },
                     "quantity" : { "type" : "integer" },
                     "price" : { "type" : "integer" },
                     "avatar" : { "type" : "string", "example" : "URL", "description" : "expected value is a URL" }
                 }
             },
-            "ProductCreate" : {
+            "TweetCreate" : {
                 "type" : "object",
                 "properties" : {
                     "userID" : { "type" : "integer" },
-                    "productName" : { "type" : "string" },
+                    "tweet" : { "type" : "string" },
                     "quantity" : { "type" : "integer" },
                     "price" : { "type" : "integer" },
                     "avatar" : { "type" : "string", "description" : "expected value is a URL" },
@@ -1020,7 +826,7 @@
                 },
                 "example" : {
                     "userID" : "1",
-                    "productName" : "Oreo 20gr",
+                    "tweet" : "Oreo 20gr",
                     "quantity" : 20,
                     "price" : 2000,
                     "avatar" : "URL",
@@ -1028,20 +834,20 @@
                     "updatedAt" : "2023-04-05T08:36:26.350Z"
                 }
             },
-            "ProductUpdateFields" : {
+            "TweetUpdateFields" : {
                 "type" : "object",
                 "properties" : {
-                    "productName" : { "type" : "string" },
+                    "tweet" : { "type" : "string" },
                     "quantity" : { "type" : "integer" },
                     "price" : { "type" : "integer" }
                 }
             },
-            "ProductUpdate" : {
+            "TweetUpdate" : {
                 "type" : "object",
                 "properties" : {
                     "id" : { "type" : "integer" },
                     "userID" : { "type" : "integer" },
-                    "productName" : { "type" : "string" },
+                    "tweet" : { "type" : "string" },
                     "quantity" : { "type" : "integer" },
                     "price" : { "type" : "integer" },
                     "avatar" : { "type" : "string", "description" : "expected value is a URL" },
@@ -1051,7 +857,7 @@
                 "example" : {
                     "id" : "1",
                     "userID" : "1",
-                    "productName" : "Oreo 20gr",
+                    "tweet" : "Oreo 20gr",
                     "quantity" : 20,
                     "price" : 2000,
                     "avatar" : "URL",
@@ -1063,8 +869,8 @@
                 "type" : "object",
                 "properties" : {
                     "id" : { "type" : "integer" },
-                    "productID" : { "type" : "integer" },
-                    "productName" : { "type" : "string" },
+                    "tweetID" : { "type" : "integer" },
+                    "tweet" : { "type" : "string" },
                     "userID" : { "type" : "integer" },
                     "toStreet" : { "type" : "string" },
                     "toCity" : { "type" : "string" },
@@ -1075,8 +881,8 @@
                 "example" : [
                     {
                         "id" : 1,
-                        "productID" : 1,
-                        "productName" : "Oreo 20gr",
+                        "tweetID" : 1,
+                        "tweet" : "Oreo 20gr",
                         "userID" : 2,
                         "toStreet" : "Jl. Pahlawan",
                         "toCity" : "Jakarta",
@@ -1086,8 +892,8 @@
                     },
                     {
                         "id" : 2,
-                        "productID" : 2,
-                        "productName" : "Pocari Sweat 300ml",
+                        "tweetID" : 2,
+                        "tweet" : "Pocari Sweat 300ml",
                         "userID" : 3,
                         "toStreet" : "Jl. Pahlawan",
                         "toCity" : "Jakarta",
@@ -1100,15 +906,15 @@
             "OrderCreateFields" : {
                 "type" : "object",
                 "properties" : {
-                    "productID" : { "type" : "integer" }
+                    "tweetID" : { "type" : "integer" }
                 }
             },
             "OrderCreate" : {
                 "type" : "object",
                 "properties" : {
                     "id" : { "type" : "integer" },
-                    "productID" : { "type" : "integer" },
-                    "productName" : { "type" : "string" },
+                    "tweetID" : { "type" : "integer" },
+                    "tweet" : { "type" : "string" },
                     "userID" : { "type" : "integer" },
                     "toStreet" : { "type" : "string" },
                     "toCity" : { "type" : "string" },
@@ -1118,8 +924,8 @@
                 },
                 "example" : {
                     "id" : 1,
-                    "productID" : 1,
-                    "productName" : "Oreo 20gr",
+                    "tweetID" : 1,
+                    "tweet" : "Oreo 20gr",
                     "userID" : 2,
                     "toStreet" : "Jl. Pahlawan",
                     "toCity" : "Jakarta",
@@ -1132,7 +938,7 @@
                 "type" : "object",
                 "properties" : {
                     "id" : { "type" : "integer" },
-                    "productID" : { "type" : "integer" },
+                    "tweetID" : { "type" : "integer" },
                     "toStreet" : { "type" : "string" },
                     "toCity" : { "type" : "string" }
                 }
@@ -1141,8 +947,8 @@
                 "type" : "object",
                 "properties" : {
                     "id" : { "type" : "integer" },
-                    "productID" : { "type" : "integer" },
-                    "productName" : { "type" : "string" },
+                    "tweetID" : { "type" : "integer" },
+                    "tweet" : { "type" : "string" },
                     "userID" : { "type" : "integer" },
                     "toStreet" : { "type" : "string" },
                     "toCity" : { "type" : "string" },
@@ -1152,8 +958,8 @@
                 },
                 "example" : {
                     "id" : 1,
-                    "productID" : 1,
-                    "productName" : "Oreo 20gr",
+                    "tweetID" : 1,
+                    "tweet" : "Oreo 20gr",
                     "userID" : 2,
                     "toStreet" : "Jl. Pahlawan",
                     "toCity" : "Jakarta",
@@ -1167,8 +973,8 @@
                 "properties" : {
                     "id" : { "type" : "integer" },
                     "userID" : { "type" : "integer" },
-                    "productID" : { "type" : "integer" },
-                    "productName" : { "type" : "string" },
+                    "tweetID" : { "type" : "integer" },
+                    "tweet" : { "type" : "string" },
                     "toStreet" : { "type" : "string" },
                     "toCity" : { "type" : "string" },
                     "status" : { "type" : "string" },
@@ -1178,8 +984,8 @@
                 "example" : {
                     "id" : 1,
                     "userID" : 2,
-                    "productID" : 1,
-                    "productName" : "Oreo 20gr",
+                    "tweetID" : 1,
+                    "tweet" : "Oreo 20gr",
                     "toStreet" : "Jl. Pahlawan",
                     "toCity" : "Jakarta",
                     "status" : "Paid",
@@ -1187,12 +993,12 @@
                     "updatedAt" : "2023-04-05T08:36:26.350Z"
                 }
             },
-            "GetProduct" : {
+            "GetTweet" : {
                 "type" : "object",
                 "properties" : {
                     "id" : { "type" : "integer" },
                     "userID" : { "type" : "integer" },
-                    "productName" : { "type" : "string" },
+                    "tweet" : { "type" : "string" },
                     "quantity" : { "type" : "integer" },
                     "price" : { "type" : "integer" },
                     "avatar" : { "type" : "string", "description" : "expected value is a URL" },
@@ -1203,7 +1009,7 @@
                     {
                         "id" : "1",
                         "user_id" : "1",
-                        "product_name" : "sepatu adidas",
+                        "tweet_name" : "sepatu adidas",
                         "quantity" : "50",
                         "price" : "1000000",
                         "avatar" : "URL",
@@ -1213,7 +1019,7 @@
                     {
                         "id" : "2",
                         "user_id" : "1",
-                        "product_name" : "kemeja hitam",
+                        "tweet_name" : "kemeja hitam",
                         "quantity" : "39",
                         "price" : "150000",
                         "avatar" : "URL",
@@ -1222,12 +1028,12 @@
                     }
                 ]
             },
-            "CreateProduct" : {
+            "CreateTweet" : {
                 "type" : "object",
                 "properties" : {
                     "id" : { "type" : "integer" },
                     "userID" : { "type" : "integer" },
-                    "productName" : { "type" : "string" },
+                    "tweet" : { "type" : "string" },
                     "quantity" : { "type" : "integer" },
                     "price" : { "type" : "integer" },
                     "avatar" : { "type" : "string", "description" : "expected value is a URL" }
@@ -1236,7 +1042,7 @@
                     {
                         "id" : "1",
                         "userID" : "1",
-                        "productName" : "sepatu adidas",
+                        "tweet" : "sepatu adidas",
                         "quantity" : "50",
                         "price" : "1000000",
                         "avatar" : "URL",
@@ -1245,12 +1051,12 @@
                     }
                 ]
             },
-            "UpdateProduct" : {
+            "UpdateTweet" : {
                 "type" : "object",
                 "properties" : {
                     "id" : { "type" : "integer" },
                     "userID" : { "type" : "integer" },
-                    "productName" : { "type" : "string" },
+                    "tweet" : { "type" : "string" },
                     "quantity" : { "type" : "integer" },
                     "price" : { "type" : "integer" },
                     "avatar" : { "type" : "string", "description" : "expected value is a URL" },
@@ -1261,7 +1067,7 @@
                     {
                         "id" : "1",
                         "userID" : "1",
-                        "productName" : "sepatu adidas",
+                        "tweet" : "sepatu adidas",
                         "quantity" : "50",
                         "price" : "1000000",
                         "avatar" : "URL",
@@ -1270,12 +1076,12 @@
                     }
                 ]
             },
-            "DeleteProduct" : {
+            "DeleteTweet" : {
                 "type" : "object",
                 "example" : [
                     {
                         "status": "Success",
-                        "data": "Product has been deleted"
+                        "data": "Tweet has been deleted"
                     }
                 ]
             } 
