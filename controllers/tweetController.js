@@ -6,7 +6,12 @@ const { uploadCloudinary } = require('../middlewares/multer');
 class TweetController {
   async get(req, res, next) {
     try {
-      const dataTweet = await Tweets.findAll({});
+      const page = req.query.page
+      const limit = req.query.limit
+      const dataTweet = await Tweets.findAll({
+        offset: ((page - 1) * limit),
+        limit: limit,
+      });
       return new Response(res, 200, dataTweet);
     } catch (error) {
       next(error);
@@ -14,14 +19,10 @@ class TweetController {
   }
   async create(req, res, next) {
     try {
-      const { tweet, quantity, price } = req.body;
-      const imageUrl = await uploadCloudinary(req.file.path)
+      const { tweet } = req.body;
       const createTweet = await Tweets.create({
         userID: req.user.id,
         tweet,
-        quantity,
-        price,
-        avatar: imageUrl,
       });
       return new Response(res, 200, createTweet);
     } catch (error) {

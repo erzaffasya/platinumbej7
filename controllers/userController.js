@@ -47,9 +47,9 @@ class UserController {
       const token = getToken(payload);
       const url = `http://localhost:${process.env.PORT}/api/user/verify/?token=${token}`;
       const msg = {
-        from: `'E-Commerce Bingle Shop Platinum <${process.env.EMAIL_TRANSPORTER}>'`,
+        from: `'Tweet Platinum <${process.env.EMAIL_TRANSPORTER}>'`,
         to: `${email}`,
-        subject: "Invitation to Join E-Commerce Bingle Shop Platinum ",
+        subject: "Invitation to Join Tweet Platinum ",
         text: `Click this link to confirm your registration: "${url}"`,
       };
       const send = await transporter.sendMail(msg);
@@ -137,7 +137,7 @@ class UserController {
   }
   async updateAvatar(req, res, next) {
     try {
-      const imageUrl = await uploadCloudinary(req.file.path)
+      const imageUrl = await uploadCloudinary(req.file.path)  
       const searchUser = await Users.findOne({
         where: { id: req.user.id },
       });
