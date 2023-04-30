@@ -52,7 +52,7 @@ class TweetController {
       if (searchID.userID !== req.user.id) {
         throw new Error(401, "Unauthorized to make changes");
       }
-      const updateUser = await Tweets.update(
+      const updateTweet = await Tweets.update(
         {
           tweet: tweet
         },
@@ -75,12 +75,24 @@ class TweetController {
       if (!dataTweet) {
         throw new Error(400, `There is no tweet with ID ${id}`);
       }
+
       if (dataTweet.userID !== req.user.id && req.user.role != 'admin') {
         throw new Error(401, "Unauthorized to make changes");
+      } else {
+        if (dataTweet.userID !== req.user.id) {
+          const updateTweet = await Tweets.update(
+            {
+              tweet: "Tweet has been deleted by admin",
+              oldTweet: dataTweet.tweet
+            },
+            { where: { id: id } }
+          );
+        } else {
+          const deleteTweet = await Tweets.destroy({
+            where: { id: id },
+          });
+        }
       }
-      const deleteTweet = await Tweets.destroy({
-        where: { id: id },
-      });
       return new Response(res, 200, "Tweet has been deleted");
     } catch (error) {
       next(error);
