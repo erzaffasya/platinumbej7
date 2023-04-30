@@ -17,4 +17,8 @@ router.post('/avatar', authAdmin, upload.single('avatar'), userController.update
 router.patch('/user', authUser, userController.update);
 router.delete('/user', authUser, userController.deleteByID);
 
+
+router.post('/active-user/:id', authAdmin, userController.activeUser);
+router.post('/disable-user/:id', authAdmin, userController.disableUser);
+
 module.exports = router;

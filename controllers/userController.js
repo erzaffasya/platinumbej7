@@ -11,7 +11,9 @@ const { uploadCloudinary } = require('../middlewares/multer');
 class UserController {
   async get(req, res, next) {
     try {
-      const data = await Users.findAll({});
+      const data = await Users.findAll({
+        where: { role: 'user' }
+      });
       if (data.length < 1) {
         throw new Error(400, "There is no user yet");
       }
@@ -37,6 +39,7 @@ class UserController {
         city,
         role,
         confirmed: false,
+        isActive: true,
       });
       const checkUser = await Users.findOne({ where: { email } });
       const payload = {
@@ -54,8 +57,8 @@ class UserController {
       };
       const send = await transporter.sendMail(msg);
       return new Response(res, 200, {
-        'nama' : name,
-        'email' : email
+        'nama': name,
+        'email': email
       });
     } catch (error) {
       next(error);
@@ -86,6 +89,12 @@ class UserController {
         throw new Error(
           400,
           "Invalid request, please confirm your email first"
+        );
+      }
+      if (checkEmail.isActive !== true) {
+        throw new Error(
+          400,
+          "Invalid request, please contact to customer service"
         );
       }
       const passwordLogin = await bcrypt.compare(password, checkEmail.password);
@@ -137,7 +146,7 @@ class UserController {
   }
   async updateAvatar(req, res, next) {
     try {
-      const imageUrl = await uploadCloudinary(req.file.path)  
+      const imageUrl = await uploadCloudinary(req.file.path)
       const searchUser = await Users.findOne({
         where: { id: req.user.id },
       });
@@ -169,6 +178,59 @@ class UserController {
       }
       const deleteUser = await Users.destroy({ where: { id: id } });
       return new Response(res, 200, "User has been deleted");
+    } catch (error) {
+      next(error);
+    }
+  }
+  async disableUser(req, res, next) {
+    try {
+      const { id } = req.params;
+      const searchID = await Users.findOne({
+        where: { id: id },
+      });
+      if (!searchID) {
+        throw new Error(400, `There is no user with ID ${id}`);
+      }
+      if (searchID.role == 'admin') {
+        throw new Error(401, `Can't disabled admin account`);
+      }
+      if ('admin' !== req.user.role) {
+        throw new Error(401, "Unauthorized to make changes");
+      }
+      const updateUser = await Users.update(
+        {
+          isActive: false
+        },
+        { where: { id: id } }
+      );
+      return new Response(res, 200, "Account has been disabled");
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async activeUser(req, res, next) {
+    try {
+      const { id } = req.params;
+      const searchID = await Users.findOne({
+        where: { id: id },
+      });
+      if (!searchID) {
+        throw new Error(400, `There is no user with ID ${id}`);
+      }
+      if (searchID.role == 'admin') {
+        throw new Error(401, `Can't activated admin account`);
+      }
+      if ('admin' != req.user.role) {
+        throw new Error(401, "Unauthorized to make changes");
+      }
+      const updateUser = await Users.update(
+        {
+          isActive: true
+        },
+        { where: { id: id } }
+      );
+      return new Response(res, 200, "Account has been activated");
     } catch (error) {
       next(error);
     }
