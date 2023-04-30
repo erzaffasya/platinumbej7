@@ -9,7 +9,7 @@ const { upload } = require('../middlewares/multer')
 
 //   router API
 
-router.get('/user', userController.get);
+router.get('/user', authAdmin, userController.get);
 router.get('/user/verify', userController.verify)
 router.post('/register', validation(registerValidator), userController.register);
 router.post('/login', validation(loginValidator), userController.login);

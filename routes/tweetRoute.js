@@ -11,6 +11,7 @@ const { upload } = require('../middlewares/multer')
 
 router.get('/tweet', authAdmin, tweetController.get);
 router.post('/tweet', authAdmin, validation(tweetValidator), tweetController.create);
+router.get('/tweet/:id', authAdmin, tweetController.show);
 router.patch('/tweet/:id', authAdmin, validation(tweetValidator), tweetController.update);
 router.delete('/tweet/:id', authAdmin, tweetController.deleteByID);
 

@@ -17,6 +17,16 @@ class TweetController {
       next(error);
     }
   }
+  async show(req, res, next) {
+    try {
+      const dataTweet = await Tweets.findOne({
+        id: req.params
+      });
+      return new Response(res, 200, dataTweet);
+    } catch (error) {
+      next(error);
+    }
+  }
   async create(req, res, next) {
     try {
       const { tweet } = req.body;
@@ -44,9 +54,7 @@ class TweetController {
       }
       const updateUser = await Tweets.update(
         {
-          tweet: tweet,
-          quantity: quantity,
-          price: price,
+          tweet: tweet
         },
         { where: { id: id } }
       );
@@ -67,7 +75,7 @@ class TweetController {
       if (!dataTweet) {
         throw new Error(400, `There is no tweet with ID ${id}`);
       }
-      if (dataTweet.userID !== req.user.id) {
+      if (dataTweet.userID !== req.user.id && req.user.role != 'admin') {
         throw new Error(401, "Unauthorized to make changes");
       }
       const deleteTweet = await Tweets.destroy({
