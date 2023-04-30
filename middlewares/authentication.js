@@ -2,7 +2,7 @@ const { verifyToken } = require('../helpers/jwt');
 const { Users, Users_Chatrooms } = require('../models');
 const Error = require('../helpers/error');
 
-const authUser= async (req, res, next) => {
+const authUser = async (req, res, next) => {
   try {
     const token = req.headers.token;
     if (!token) {
@@ -27,7 +27,29 @@ const authUser= async (req, res, next) => {
   }
 };
 
-const authAdmin= async (req, res, next) => {
+const auth = async (req, res, next) => {
+  try {
+    const token = req.headers.token;
+    if (!token) {
+      throw new Error(401, 'Invalid token');
+    }
+    const decodedToken = verifyToken(token);
+    const user = await Users.findByPk(decodedToken.id);
+    if (user.confirmed !== true) {
+      throw new Error(401, 'Please verify your email first');
+    }
+    req.user = {
+      id: user.id,
+      email: user.email,
+      role: user.role
+    };
+    next();
+  } catch (error) { 
+    next(error);
+  }
+};
+
+const authAdmin = async (req, res, next) => {
   try {
     const token = req.headers.token;
     if (!token) {
@@ -52,4 +74,4 @@ const authAdmin= async (req, res, next) => {
   }
 };
 
-module.exports = { authAdmin, authUser};
+module.exports = { authAdmin, auth, authUser};

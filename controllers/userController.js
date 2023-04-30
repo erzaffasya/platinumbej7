@@ -7,7 +7,6 @@ const transporter = require("../helpers/nodemailer");
 const nodemailer = require("nodemailer");
 const { uploadCloudinary } = require('../middlewares/multer');
 
-
 class UserController {
   async get(req, res, next) {
     try {
@@ -116,7 +115,8 @@ class UserController {
   }
   async update(req, res, next) {
     try {
-      const { name, email, street, city } = req.body;
+      const { name, street, city } = req.body;
+      const imageUrl = await uploadCloudinary(req.file.path);
       const { id } = req.user;
       const searchID = await Users.findOne({
         where: { id: id },
@@ -130,9 +130,9 @@ class UserController {
       const updateUser = await Users.update(
         {
           name: name,
-          email: email,
           street: street,
           city: city,
+          avatar: imageUrl
         },
         { where: { id: id } }
       );
@@ -208,7 +208,6 @@ class UserController {
       next(error);
     }
   }
-
   async activeUser(req, res, next) {
     try {
       const { id } = req.params;
